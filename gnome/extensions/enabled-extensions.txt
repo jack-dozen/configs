@@ -1,0 +1,16 @@
+wintile@nowsci.com
+hide-dash-overview@PendaGTP
+Vitals@CoreCoding.com
+nowplaying@epogonii.github.io
+blur-my-shell@aunetx
+window-title-pro@eprahemi.github.io
+burn-my-windows@schneegans.github.com
+monochrome-toggle@rangol.se
+liquid-glass@thinkingcoding1231.gmail.com
+user-theme@gnome-shell-extensions.gcampax.github.com
+gnome-toggle-topbar@sonersg.ext
+ding@rastersoft.com
+snapd-prompting@canonical.com
+snapd-search-provider@canonical.com
+ubuntu-appindicators@ubuntu.com
+web-search-provider@ubuntu.com

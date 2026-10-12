@@ -1,0 +1,79 @@
+/* Address field lebih pendek & di tengah (Safari-like) */
+.UrlBar-AddressField {
+  max-width: 55% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ==============================
+   URL Centered (hanya saat TIDAK edit)
+   ============================== */
+
+/* Teks URL di tengah saat tidak fokus / tidak sedang mengetik */
+.UrlField:not(.UrlField--HasEditText) .UrlBar-UrlField {
+  text-align: center !important;
+}
+
+/* Bikin wrapper-nya ikut di tengah */
+.UrlField:not(.UrlField--HasEditText) .UrlFragment-Wrapper {
+  width: fit-content !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* Saat sedang fokus / edit → paksa kembali ke kiri */
+.UrlField.UrlField--HasEditText .UrlBar-UrlField,
+.UrlField:focus-within .UrlBar-UrlField {
+  text-align: left !important;
+}
+
+.UrlField.UrlField--HasEditText .UrlFragment-Wrapper,
+.UrlField:focus-within .UrlFragment-Wrapper {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: auto !important;
+}
+
+/* ==============================
+   Opsional: Cuma tampilkan domain saja
+   (sembunyikan path saat tidak fokus)
+   ============================== */
+.UrlBar-AddressField:not(:focus-within):not(:hover) .UrlFragment-LinkWrapper .UrlFragment--Lowlight {
+  font-size: 0 !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Sembunyikan URL New Tab lokal (chevron) */
+.UrlBar-AddressField:has(input[value*="chevron/index.html"]) .UrlFragment-Wrapper,
+.UrlBar-AddressField:has(input[value*="chevron/index.html"]) input.UrlBar-UrlField {
+  opacity: 0 !important;
+  color: transparent !important;
+}
+
+/* Saat diklik / fokus → tampilkan lagi */
+.UrlBar-AddressField:has(input[value*="chevron/index.html"]):focus-within .UrlFragment-Wrapper,
+.UrlBar-AddressField:has(input[value*="chevron/index.html"]):focus-within input.UrlBar-UrlField {
+  opacity: 1 !important;
+  color: var(--colorFg) !important;
+}
+
+/* Sembunyikan URL New Tab lokal (chevron) */
+.UrlBar-AddressField:has(input[value*="chevron-college/index.html"]) .UrlFragment-Wrapper,
+.UrlBar-AddressField:has(input[value*="chevron-college/index.html"]) input.UrlBar-UrlField {
+  opacity: 0 !important;
+  color: transparent !important;
+}
+
+/* Saat diklik / fokus → tampilkan lagi */
+.UrlBar-AddressField:has(input[value*="chevron-college/index.html"]):focus-within .UrlFragment-Wrapper,
+.UrlBar-AddressField:has(input[value*="chevron-college/index.html"]):focus-within input.UrlBar-UrlField {
+  opacity: 1 !important;
+  color: var(--colorFg) !important;
+}
+
+/* Collapsed by default, expand on hover */
+/* masih mencari */

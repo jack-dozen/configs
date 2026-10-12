@@ -1,0 +1,65 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 4,
+  "final_space": true,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "template": "\u3069\u3053\uff1f",
+          "foreground": "p:text-light"
+        },
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "p:text-light",
+          "template": " {{ .Path }} ",
+          "properties": {
+            "style": "short",
+            "max_depth": 3
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "status",
+          "style": "plain",
+          "foreground": "p:prompt-ok",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}p:prompt-error{{ end }}"
+          ],
+          "template": "> ",
+          "properties": {
+            "always_enabled": true
+          }
+        }
+      ]
+    }
+  ],
+  "palette": {
+    "text-light": "#DCD7BA",
+    "text-dark": "#1F1F28",
+    "session-bg": "#957FB8",
+    "path-bg": "#7E9CD8",
+    "git-bg": "#98BB6C",
+    "git-modified-bg": "#E6C384",
+    "git-diverged-bg": "#C34043",
+    "git-ahead-bg": "#7AA89F",
+    "node-bg": "#98BB6C",
+    "python-bg": "#E6C384",
+    "go-bg": "#7FB4CA",
+    "rust-bg": "#C0A36E",
+    "exectime-bg": "#C34043",
+    "prompt-ok": "#DCD7BA",
+    "prompt-error": "#E82424"
+  }
+}

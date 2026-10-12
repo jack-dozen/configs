@@ -1,0 +1,89 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 4,
+  "final_space": true,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "os",
+          "style": "plain",
+          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
+          "cache": {
+            "duration": "24h",
+            "strategy": "session"
+          },
+          "foreground": "p:magenta"
+        },
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "p:blue",
+          "template": " {{ .Path }} ",
+          "options": {
+            "style": "short",
+            "max_depth": 3
+          }
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "template": "on {{ .HEAD }} ",
+          "cache": {
+            "duration": "2s",
+            "strategy": "session"
+          },
+          "foreground": "p:green"
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "type": "session",
+          "style": "plain",
+          "template": "{{ .UserName }}@{{ .HostName }} ",
+          "foreground": "p:bright-magenta"
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "status",
+          "style": "plain",
+          "foreground": "p:prompt-ok",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}p:prompt-error{{ end }}"
+          ],
+          "template": "\u276f ",
+          "options": {
+            "always_enabled": true
+          }
+        }
+      ]
+    }
+  ],
+  "palette": {
+    "black": "#16161D",
+    "red": "#C34043",
+    "green": "#76946A",
+    "yellow": "#C0A36E",
+    "blue": "#7E9CD8",
+    "magenta": "#957FB8",
+    "cyan": "#6A9589",
+    "white": "#C8C093",
+    "bright-magenta": "#DCD7BA",
+    "text-light": "#DCD7BA",
+    "text-dark": "#16161D",
+    "prompt-ok": "#98BB6C",
+    "prompt-error": "#E82424"
+  }
+}
