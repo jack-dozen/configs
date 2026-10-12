@@ -1,0 +1,112 @@
+{
+    "redhat.telemetry.enabled": true,
+    "files.autoSave": "afterDelay",
+    "pseudo.DefaultInterpreter": "vscode:PseudoCodeInterpreter.exe",
+    "claudeCode.preferredLocation": "panel",
+    "workbench.activityBar.location": "bottom",
+    "workbench.statusBar.visible": true,
+    "editor.minimap.enabled": false,
+    "window.commandCenter": false,
+    "editor.autoIndentOnPaste": true,
+    "vscode-pets.petSize": "small",
+    "vscode-pets.theme": "autumn",
+    "vscode-pets.throwBallWithMouse": true,
+    "vscode-pets.petColor": "white",
+    "github.copilot.enable": {
+        "*": false
+    },
+    "workbench.tree.indent": 16,
+    "explorer.compactFolders": false,
+    "explorer.confirmDragAndDrop": false,
+    "codesnap.containerPadding": "0em",
+    "workbench.colorTheme": "Kanagawa Black",
+    "workbench.iconTheme": "catppuccin-macchiato",
+    "editor.lineNumbers": "relative",
+    "editor.cursorStyle": "block",
+    "editor.cursorBlinking": "solid",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "code-runner.runInTerminal": true,
+    "indentRainbow.indicatorStyle": "light",
+    "indentRainbow.lightIndicatorStyleLineWidth": 1,
+    "indentRainbow.colors": [
+    "rgba(255,255,64,0.3)",
+    "rgba(127,255,127,0.3)",
+    "rgba(255,127,255,0.3)",
+    "rgba(79,236,236,0.3)"
+    ],
+    "indentRainbow.ignoreErrorLanguages": [
+        "*"
+    ],
+    "codesnap.showWindowControls": false,
+    "codesnap.roundedCorners": false,
+    "cmake.additionalCompilerSearchDirs": [
+        "C:/msys64/mingw32/bin",
+        "C:/msys64/mingw64/bin",
+        "C:/msys64/clang32/bin",
+        "C:/msys64/clang64/bin",
+        "C:/msys64/clangarm64/bin",
+        "C:/msys64/ucrt64/bin"
+    ],
+    "better-comments.tags": [
+
+        {
+            "tag": "!",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "//",
+            "color": "#474747",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "*",
+            "color": "#98C379",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        }
+    ],
+    "haskell.manageHLS": "GHCup",
+    "window.menuBarVisibility": "compact",
+    "chat.titleBar.openInAgentsWindow.enabled": false,
+    "workbench.layoutControl.enabled": false,
+    "workbench.tips.enabled": false,
+    "window.title": " ",
+    "window.controlsStyle": "hidden",
+    "breadcrumbs.enabled": false,
+    "editor.scrollbar.horizontal": "hidden",
+    "editor.scrollbar.vertical": "hidden",
+    "editor.lightbulb.enabled": "off",
+    "terminal.integrated.fontFamily": "'Symbols Nerd Font Mono', monospace",
+    "jdk.telemetry.enabled": false
+}
