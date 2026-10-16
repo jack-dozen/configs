@@ -1,6 +1,4 @@
-# configs
-
-Personal configs for terminal, GNOME, editors, etc.
+# configs - nothing to read, this readme is my personal notes
 
 ⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠇⡅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -66,8 +64,6 @@ KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA W
 
 ## Ubuntu terminal tools
 > For when I forger, so I keep them here.
-
-The tools listed below are for Ubuntu only.
 
 | Tool | Purpose |
 | --- | --- |
