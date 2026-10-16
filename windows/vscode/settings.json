@@ -9,7 +9,7 @@
     "window.commandCenter": false,
     "editor.autoIndentOnPaste": true,
     "vscode-pets.petSize": "small",
-    "vscode-pets.theme": "autumn",
+    "vscode-pets.theme": "winter",
     "vscode-pets.throwBallWithMouse": true,
     "vscode-pets.petColor": "white",
     "github.copilot.enable": {
@@ -19,8 +19,8 @@
     "explorer.compactFolders": false,
     "explorer.confirmDragAndDrop": false,
     "codesnap.containerPadding": "0em",
-    "workbench.colorTheme": "Kanagawa Black",
-    "workbench.iconTheme": "catppuccin-macchiato",
+    "workbench.colorTheme": "Soft Blue Night",
+    "workbench.iconTheme": "material-icon-theme",
     "editor.lineNumbers": "relative",
     "editor.cursorStyle": "block",
     "editor.cursorBlinking": "solid",
@@ -108,5 +108,11 @@
     "editor.scrollbar.vertical": "hidden",
     "editor.lightbulb.enabled": "off",
     "terminal.integrated.fontFamily": "'Symbols Nerd Font Mono', monospace",
-    "jdk.telemetry.enabled": false
+    "jdk.telemetry.enabled": false,
+    "winopacity.opacity": 150,
+    "material-icon-theme.folders.color": "#81D4E6",
+    "material-icon-theme.folders.theme": "specific",
+    "material-icon-theme.saturation": 0.7,
+    "material-icon-theme.opacity": 0.9,
+    "material-icon-theme.hidesExplorerArrows": true
 }

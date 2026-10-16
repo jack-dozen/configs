@@ -1,8 +1,7 @@
 # configs
 
-Personal configs for terminal, GNOME, and editors.
+Personal configs for terminal, GNOME, editors, etc.
 
-Theme:
 ⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠇⡅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠧⡇⠀⠀⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⡤⡆⠦⠆⢀⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -39,23 +38,36 @@ KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA W
 
 <img src="wallpaper/0b712.jpg" alt="wallpaper" width="600">
 
+## Concepts and themes
+
+| Platform | Concept | Theme |
+| --- | --- | --- |
+| Windows | Inspired by Caelestia Shell | Default Windows theme |
+| Ubuntu | IDK | Kanagawa |
+
 ## Contents
 
 | Folder | Description |
 | --- | --- |
-| `bash/` | `.bashrc` |
-| `kitty/` | Kitty |
-| `ohmyposh/` | oh-my-posh prompts |
-| `starship/` | Starship prompt |
-| `fastfetch/` | fastfetch configs and logos |
-| `eza/` | eza colors |
-| `gnome/` | Extensions, theme, icons, cursor |
-| `vscode/` | Settings for Linux (`-L`) and Windows (`-W`) |
-| `vivaldi/` | CSS mods |
+| `ubuntu/bash/` | Bash configuration |
+| `ubuntu/eza/` | eza colors |
+| `ubuntu/fastfetch/` | fastfetch configurations and logos |
+| `ubuntu/gnome/` | GNOME tweaks and extensions |
+| `ubuntu/kitty/` | Kitty configuration and themes |
+| `ubuntu/ohmyposh/` | oh-my-posh prompts |
+| `ubuntu/starship/` | Starship prompt configuration |
+| `ubuntu/vivaldi/` | Vivaldi CSS mods |
+| `ubuntu/vscode/` | Ubuntu VS Code settings |
+| `windows/bloom/` | Bloom settings |
+| `windows/ohmyposh/` | oh-my-posh prompts |
+| `windows/vscode/` | Windows VS Code settings |
+| `windows/windhawk/` | Windhawk mods |
 | `wallpaper/` | Wallpaper |
 
-## Terminal tools
-> Sometimes i forgor, so i just put it here
+## Ubuntu terminal tools
+> For when I forger, so I keep them here.
+
+The tools listed below are for Ubuntu only.
 
 | Tool | Purpose |
 | --- | --- |

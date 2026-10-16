@@ -1,0 +1,11 @@
+notificationCenter:
+  horizontalAlignment: right
+  horizontalShift: 0
+actionCenter:
+  horizontalAlignment: tray
+  horizontalShift: 0
+startMenu:
+  horizontalAlignment: windowsDefault
+  horizontalShift: 0
+  verticalAlignment: windowsDefault
+  verticalShift: 0
