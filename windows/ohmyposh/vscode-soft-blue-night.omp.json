@@ -11,10 +11,10 @@
           "type": "path",
           "style": "plain",
           "foreground": "p:blue",
-          "template": " {{ .Path }} ",
+          "template": " {{ .Path | replace \":\" \"\" | replace \"\\\\\" \"/\" }} ",
           "properties": {
-            "style": "short",
-            "max_depth": 3
+            "style": "agnoster_short",
+            "max_depth": 4
           }
         },
         {

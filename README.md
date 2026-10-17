@@ -82,3 +82,10 @@ KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA W
 | pdf-cli | PDF viewer |
 | ghgrab | Download specific files/folders from GitHub |
 | yoinks | Video downloader |
+
+## Vivaldi custom startpage
+| Startpage/New Tab |
+|---|
+| [Chevron](https://github.com/kholmogorov27/chevron) |
+| [Terminal Tab](https://github.com/nyas1/terminal-tab) |
+| [Startpage_kb](https://github.com/mult1v4c/startpage_kb) |
