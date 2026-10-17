@@ -1,0 +1,1215 @@
+{
+  "tui-trakt-client-secret": "",
+  "tui-reserve-settings": true,
+  "tui-search-slash-hotkey": true,
+  "tui-now-playing-provider": "spotify",
+  "tui-theme": "nord",
+  "tui-resizing-enabled": true,
+  "tui-link-icon-mode": "favicon",
+  "tui-links": [
+    {
+      "category": "work",
+      "links": [
+        {
+          "label": "gmail",
+          "url": "https://gmail.com"
+        },
+        {
+          "label": "calendar",
+          "url": "https://calendar.google.com"
+        },
+        {
+          "label": "drive",
+          "url": "https://drive.google.com"
+        },
+        {
+          "label": "docs",
+          "url": "https://docs.google.com"
+        }
+      ]
+    },
+    {
+      "category": "dev",
+      "links": [
+        {
+          "label": "github",
+          "url": "https://github.com"
+        },
+        {
+          "label": "slack",
+          "url": "https://slack.com"
+        },
+        {
+          "label": "keep",
+          "url": "https://keep.google.com"
+        },
+        {
+          "label": "leetcode",
+          "url": "https://leetcode.com"
+        }
+      ]
+    },
+    {
+      "category": "ai",
+      "links": [
+        {
+          "label": "perplexity",
+          "url": "https://perplexity.ai"
+        },
+        {
+          "label": "claude",
+          "url": "https://claude.ai"
+        },
+        {
+          "label": "aistudio",
+          "url": "https://aistudio.google.com"
+        },
+        {
+          "label": "chatgpt",
+          "url": "https://chat.openai.com"
+        }
+      ]
+    },
+    {
+      "category": "social",
+      "links": [
+        {
+          "label": "youtube",
+          "url": "https://youtube.com"
+        },
+        {
+          "label": "reddit",
+          "url": "https://reddit.com"
+        },
+        {
+          "label": "twitter",
+          "url": "https://twitter.com"
+        },
+        {
+          "label": "feedly",
+          "url": "https://feedly.com"
+        }
+      ]
+    }
+  ],
+  "tui-custom-css": "",
+  "tui-layout-locked-v2": false,
+  "tui-anilist-shown-lists": [
+    "CURRENT"
+  ],
+  "tui-search-default-engine": "google",
+  "tui-tmdb-api-key": "",
+  "tui-weather-cache": {
+    "locationName": "Kecamatan Cimahi Utara",
+    "locationState": "Jawa",
+    "current": {
+      "temp": 86,
+      "condition": "Overcast",
+      "weatherCode": 3,
+      "humidity": 37,
+      "windSpeed": 5,
+      "feelsLike": 86,
+      "precipProb": 35,
+      "precipAmt": 0,
+      "visKm": 30.28,
+      "isDay": 1
+    },
+    "forecast": [
+      {
+        "time": " 2 pm",
+        "temp": 84,
+        "condition": "Overcast",
+        "weatherCode": 3,
+        "isDay": 1
+      },
+      {
+        "time": " 3 pm",
+        "temp": 83,
+        "condition": "Overcast",
+        "weatherCode": 3,
+        "isDay": 1
+      },
+      {
+        "time": " 4 pm",
+        "temp": 83,
+        "condition": "Overcast",
+        "weatherCode": 3,
+        "isDay": 1
+      }
+    ]
+  },
+  "tui-fun-options-v3": {
+    "matrix": {
+      "speed": 50,
+      "fade": 0.05,
+      "charSet": "mixed",
+      "charFlux": 30,
+      "glow": true,
+      "fontSize": 16
+    },
+    "pipes": {
+      "speed": 50,
+      "fade": 0.1,
+      "count": 5,
+      "fontSize": 16,
+      "lifetime": 80
+    },
+    "donut": {
+      "speed": 50
+    },
+    "snake": {
+      "speed": 100
+    },
+    "life": {
+      "speed": 50
+    },
+    "fireworks": {
+      "speed": 50,
+      "explosionSize": 50
+    },
+    "starfield": {
+      "speed": 25
+    },
+    "rain": {
+      "speed": 48
+    },
+    "maze": {
+      "speed": 50
+    }
+  },
+  "tui-tab-title": "New Tab",
+  "tui-trakt-client-id": "",
+  "tui-stats-mode": "detailed",
+  "tui-weather-mode": "standard",
+  "tui-date-format": "short",
+  "tui-lastfm-api-key": "",
+  "tui-presets": [
+    {
+      "id": 1792221302233,
+      "name": "LARP MODE",
+      "data": {
+        "currentTheme": "nord",
+        "todos": [],
+        "linkGroups": [
+          {
+            "category": "work",
+            "links": [
+              {
+                "label": "gmail",
+                "url": "https://gmail.com"
+              },
+              {
+                "label": "calendar",
+                "url": "https://calendar.google.com"
+              },
+              {
+                "label": "drive",
+                "url": "https://drive.google.com"
+              },
+              {
+                "label": "docs",
+                "url": "https://docs.google.com"
+              }
+            ]
+          },
+          {
+            "category": "dev",
+            "links": [
+              {
+                "label": "github",
+                "url": "https://github.com"
+              },
+              {
+                "label": "slack",
+                "url": "https://slack.com"
+              },
+              {
+                "label": "keep",
+                "url": "https://keep.google.com"
+              },
+              {
+                "label": "leetcode",
+                "url": "https://leetcode.com"
+              }
+            ]
+          },
+          {
+            "category": "ai",
+            "links": [
+              {
+                "label": "perplexity",
+                "url": "https://perplexity.ai"
+              },
+              {
+                "label": "claude",
+                "url": "https://claude.ai"
+              },
+              {
+                "label": "aistudio",
+                "url": "https://aistudio.google.com"
+              },
+              {
+                "label": "chatgpt",
+                "url": "https://chat.openai.com"
+              }
+            ]
+          },
+          {
+            "category": "social",
+            "links": [
+              {
+                "label": "youtube",
+                "url": "https://youtube.com"
+              },
+              {
+                "label": "reddit",
+                "url": "https://reddit.com"
+              },
+              {
+                "label": "twitter",
+                "url": "https://twitter.com"
+              },
+              {
+                "label": "feedly",
+                "url": "https://feedly.com"
+              }
+            ]
+          }
+        ],
+        "customCss": "",
+        "statsMode": "detailed",
+        "weatherMode": "standard",
+        "weatherShowHourlyForecast": true,
+        "tempUnit": "C",
+        "timeFormat": "24h",
+        "dateFormat": "short",
+        "clockShowDay": false,
+        "clockShowSeconds": false,
+        "layouts": {
+          "lg": [
+            {
+              "w": 1,
+              "h": 1,
+              "x": 11,
+              "y": 0,
+              "i": "settings-guard",
+              "moved": false,
+              "static": true
+            },
+            {
+              "w": 6,
+              "h": 2,
+              "x": 0,
+              "y": 7,
+              "i": "search",
+              "minW": 1,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 3,
+              "h": 2,
+              "x": 3,
+              "y": 0,
+              "i": "datetime",
+              "minW": 1,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 3,
+              "h": 5,
+              "x": 3,
+              "y": 2,
+              "i": "stats",
+              "minW": 1,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 3,
+              "h": 7,
+              "x": 0,
+              "y": 0,
+              "i": "donut",
+              "minW": 1,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            }
+          ],
+          "md": [
+            {
+              "w": 1,
+              "h": 1,
+              "x": 11,
+              "y": 0,
+              "i": "settings-guard",
+              "moved": false,
+              "static": true
+            },
+            {
+              "w": 11,
+              "h": 2,
+              "x": 0,
+              "y": 0,
+              "i": "search",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 8,
+              "h": 4,
+              "x": 0,
+              "y": 2,
+              "i": "datetime",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 4,
+              "h": 3,
+              "x": 8,
+              "y": 2,
+              "i": "stats",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 2,
+              "h": 4,
+              "x": 0,
+              "y": 6,
+              "i": "donut",
+              "minW": 1,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "i": "starfield",
+              "x": 0,
+              "y": 10,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "life",
+              "x": 0,
+              "y": 14,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "rain",
+              "x": 0,
+              "y": 18,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "links",
+              "x": 0,
+              "y": 22,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "weather",
+              "x": 0,
+              "y": 26,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            }
+          ],
+          "sm": [
+            {
+              "w": 1,
+              "h": 1,
+              "x": 5,
+              "y": 0,
+              "i": "settings-guard",
+              "moved": false,
+              "static": true
+            },
+            {
+              "w": 5,
+              "h": 2,
+              "x": 0,
+              "y": 0,
+              "i": "search",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 6,
+              "h": 4,
+              "x": 0,
+              "y": 2,
+              "i": "datetime",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 6,
+              "h": 3,
+              "x": 0,
+              "y": 6,
+              "i": "stats",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 2,
+              "h": 4,
+              "x": 0,
+              "y": 9,
+              "i": "donut",
+              "minW": 1,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "i": "starfield",
+              "x": 0,
+              "y": 13,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "life",
+              "x": 0,
+              "y": 17,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "rain",
+              "x": 0,
+              "y": 21,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "links",
+              "x": 0,
+              "y": 25,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "weather",
+              "x": 0,
+              "y": 29,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            }
+          ],
+          "xs": [
+            {
+              "w": 1,
+              "h": 1,
+              "x": 3,
+              "y": 0,
+              "i": "settings-guard",
+              "moved": false,
+              "static": true
+            },
+            {
+              "w": 4,
+              "h": 2,
+              "x": 0,
+              "y": 1,
+              "i": "search",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 4,
+              "h": 4,
+              "x": 0,
+              "y": 3,
+              "i": "datetime",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 4,
+              "h": 3,
+              "x": 0,
+              "y": 7,
+              "i": "stats",
+              "minW": 2,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "w": 2,
+              "h": 4,
+              "x": 0,
+              "y": 10,
+              "i": "donut",
+              "minW": 1,
+              "minH": 2,
+              "moved": false,
+              "static": false
+            },
+            {
+              "i": "starfield",
+              "x": 0,
+              "y": 14,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "life",
+              "x": 0,
+              "y": 18,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "rain",
+              "x": 0,
+              "y": 22,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "links",
+              "x": 0,
+              "y": 26,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            },
+            {
+              "i": "weather",
+              "x": 0,
+              "y": 30,
+              "w": 2,
+              "h": 4,
+              "minW": 1,
+              "minH": 2
+            }
+          ]
+        },
+        "activeWidgets": {
+          "search": true,
+          "datetime": true,
+          "stats": true,
+          "weather": false,
+          "todo": false,
+          "links": false,
+          "spotify": false,
+          "github": false,
+          "anilist": false,
+          "trakt": false,
+          "donut": true,
+          "matrix": false,
+          "pipes": false,
+          "snake": false,
+          "life": false,
+          "fireworks": false,
+          "starfield": false,
+          "rain": false,
+          "maze": false
+        },
+        "showWidgetTitles": false,
+        "linkIconMode": "favicon",
+        "customFont": "",
+        "customTabTitle": "New Tab",
+        "customTabFavicon": ">",
+        "funOptions": {
+          "matrix": {
+            "speed": 50,
+            "fade": 0.05,
+            "charSet": "mixed",
+            "charFlux": 30,
+            "glow": true,
+            "fontSize": 16
+          },
+          "pipes": {
+            "speed": 50,
+            "fade": 0.1,
+            "count": 5,
+            "fontSize": 16,
+            "lifetime": 80
+          },
+          "donut": {
+            "speed": 50
+          },
+          "snake": {
+            "speed": 100
+          },
+          "life": {
+            "speed": 50
+          },
+          "fireworks": {
+            "speed": 50,
+            "explosionSize": 50
+          },
+          "starfield": {
+            "speed": 25
+          },
+          "rain": {
+            "speed": 48
+          },
+          "maze": {
+            "speed": 50
+          }
+        },
+        "openInNewTab": false,
+        "searchDefaultEngine": "google",
+        "searchEnabledEngines": [
+          "google",
+          "youtube",
+          "reddit",
+          "github"
+        ],
+        "searchSlashHotkeyEnabled": true,
+        "spotifyPixelAlbumArt": true,
+        "spotifyPulse": true,
+        "nowPlayingProvider": "spotify",
+        "lastfmUsername": "",
+        "lastfmApiKey": "",
+        "integrationApiBaseUrl": "",
+        "githubUsername": "",
+        "githubLimit": 10,
+        "anilistUsername": "",
+        "anilistShownLists": [
+          "CURRENT"
+        ],
+        "anilistLinkTarget": "anilist",
+        "traktClientId": "",
+        "traktClientSecret": "",
+        "tmdbApiKey": ""
+      }
+    }
+  ],
+  "tui-github-username": "",
+  "tui-show-titles": false,
+  "tui-anilist-link-target": "anilist",
+  "tui-temp-unit": "C",
+  "tui-spotify-pixel-album-art": true,
+  "tui-todos": [],
+  "tui-weather-location-mode": "manual",
+  "tui-custom-themes": {
+    "Windows": {
+      "name": "Windows",
+      "colors": {
+        "bg": "#1c1c1c",
+        "fg": "#b0c6cb",
+        "accent": "#b0c6cb",
+        "muted": "#777777",
+        "border": "#333333",
+        "hover": "#222222"
+      }
+    }
+  },
+  "tui-custom-font": "",
+  "tui-active-widgets-v4": {
+    "search": true,
+    "datetime": true,
+    "stats": true,
+    "weather": false,
+    "todo": false,
+    "links": false,
+    "spotify": false,
+    "github": false,
+    "anilist": false,
+    "trakt": false,
+    "donut": true,
+    "matrix": false,
+    "pipes": false,
+    "snake": false,
+    "life": false,
+    "fireworks": false,
+    "starfield": false,
+    "rain": false,
+    "maze": false
+  },
+  "tui-github-limit": 10,
+  "tui-hide-tooltips": true,
+  "tui-lastfm-username": "",
+  "tui-tab-favicon": ">",
+  "tui-spotify-pulse": true,
+  "tui-anilist-username": "",
+  "tui-clock-show-day": false,
+  "tui-hide-settings-tip": 1,
+  "tui-time-format": "24h",
+  "tui-layouts-v4": {
+    "lg": [
+      {
+        "w": 1,
+        "h": 1,
+        "x": 11,
+        "y": 0,
+        "i": "settings-guard",
+        "moved": false,
+        "static": true
+      },
+      {
+        "w": 6,
+        "h": 2,
+        "x": 0,
+        "y": 7,
+        "i": "search",
+        "minW": 1,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 3,
+        "h": 2,
+        "x": 3,
+        "y": 0,
+        "i": "datetime",
+        "minW": 1,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 3,
+        "h": 5,
+        "x": 3,
+        "y": 2,
+        "i": "stats",
+        "minW": 1,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 3,
+        "h": 7,
+        "x": 0,
+        "y": 0,
+        "i": "donut",
+        "minW": 1,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      }
+    ],
+    "md": [
+      {
+        "w": 1,
+        "h": 1,
+        "x": 11,
+        "y": 0,
+        "i": "settings-guard",
+        "moved": false,
+        "static": true
+      },
+      {
+        "w": 11,
+        "h": 2,
+        "x": 0,
+        "y": 0,
+        "i": "search",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 8,
+        "h": 4,
+        "x": 0,
+        "y": 2,
+        "i": "datetime",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 4,
+        "h": 3,
+        "x": 8,
+        "y": 2,
+        "i": "stats",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 2,
+        "h": 4,
+        "x": 0,
+        "y": 6,
+        "i": "donut",
+        "minW": 1,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "i": "starfield",
+        "x": 0,
+        "y": 10,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "life",
+        "x": 0,
+        "y": 14,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "rain",
+        "x": 0,
+        "y": 18,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "links",
+        "x": 0,
+        "y": 22,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "weather",
+        "x": 0,
+        "y": 26,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "fireworks",
+        "x": 0,
+        "y": 30,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "pipes",
+        "x": 0,
+        "y": 38,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      }
+    ],
+    "sm": [
+      {
+        "w": 1,
+        "h": 1,
+        "x": 5,
+        "y": 0,
+        "i": "settings-guard",
+        "moved": false,
+        "static": true
+      },
+      {
+        "w": 5,
+        "h": 2,
+        "x": 0,
+        "y": 0,
+        "i": "search",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 6,
+        "h": 4,
+        "x": 0,
+        "y": 2,
+        "i": "datetime",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 6,
+        "h": 3,
+        "x": 0,
+        "y": 6,
+        "i": "stats",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 2,
+        "h": 4,
+        "x": 0,
+        "y": 9,
+        "i": "donut",
+        "minW": 1,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "i": "starfield",
+        "x": 0,
+        "y": 13,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "life",
+        "x": 0,
+        "y": 17,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "rain",
+        "x": 0,
+        "y": 21,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "links",
+        "x": 0,
+        "y": 25,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "weather",
+        "x": 0,
+        "y": 29,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "fireworks",
+        "x": 0,
+        "y": 33,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "pipes",
+        "x": 0,
+        "y": 41,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      }
+    ],
+    "xs": [
+      {
+        "w": 1,
+        "h": 1,
+        "x": 3,
+        "y": 0,
+        "i": "settings-guard",
+        "moved": false,
+        "static": true
+      },
+      {
+        "w": 4,
+        "h": 2,
+        "x": 0,
+        "y": 1,
+        "i": "search",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 4,
+        "h": 4,
+        "x": 0,
+        "y": 3,
+        "i": "datetime",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 4,
+        "h": 3,
+        "x": 0,
+        "y": 7,
+        "i": "stats",
+        "minW": 2,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "w": 2,
+        "h": 4,
+        "x": 0,
+        "y": 10,
+        "i": "donut",
+        "minW": 1,
+        "minH": 2,
+        "moved": false,
+        "static": false
+      },
+      {
+        "i": "starfield",
+        "x": 0,
+        "y": 14,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "life",
+        "x": 0,
+        "y": 18,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "rain",
+        "x": 0,
+        "y": 22,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "links",
+        "x": 0,
+        "y": 26,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "weather",
+        "x": 0,
+        "y": 30,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "fireworks",
+        "x": 0,
+        "y": 34,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      },
+      {
+        "i": "pipes",
+        "x": 0,
+        "y": 42,
+        "w": 2,
+        "h": 4,
+        "minW": 1,
+        "minH": 2
+      }
+    ]
+  },
+  "tui-open-new-tab": false,
+  "tui-weather-location": {
+    "latitude": null,
+    "longitude": null
+  },
+  "tui-search-enabled-engines": [
+    "google",
+    "youtube",
+    "reddit",
+    "github"
+  ],
+  "tui-trakt-continue-days": 90,
+  "tui-clock-show-seconds": false,
+  "tui-weather-show-hourly": true,
+  "tui-integration-api-base-url": ""
+}
