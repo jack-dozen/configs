@@ -37,7 +37,9 @@ KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA WAVE KANAGAWA W
 <img src="wallpaper/0b712.jpg" alt="wallpaper" width="600">
 
 WIP caelestia-windows, not port, just windhawk mod
-<video src="https://github.com/user-attachments/assets/cf7d36dd-8900-4c41-b53b-8e47d0c80724" width="100%"></video>
+
+https://github.com/user-attachments/assets/cf7d36dd-8900-4c41-b53b-8e47d0c80724
+
 idk why so laggy, 
 
 ## Concepts and themes
