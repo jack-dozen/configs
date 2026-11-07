@@ -1,12 +1,12 @@
 // ==WindhawkMod==
 // @id              fluid-shell
 // @name            Fluid Shell
-// @description     A fluid desktop shell: side bar that replaces the taskbar, plus a launcher with window switcher, calculator and power commands.
-// @version         0.1.0
+// @description     A fluid desktop shell: side bar instead of the taskbar, a notch dashboard, a launcher and a volume / brightness overlay, all growing out of one frame.
+// @version         1.0.0
 // @author          David Ravelo
 // @github          https://github.com/DavidRaveloU
 // @include         windhawk.exe
-// @compilerOptions -lole32 -lshell32 -luser32 -lgdi32 -ld2d1 -ldwrite -luuid -ladvapi32 -lwindowscodecs -lpropsys -lversion
+// @compilerOptions -lole32 -lshell32 -luser32 -lgdi32 -ld2d1 -ldwrite -luuid -ladvapi32 -lwindowscodecs -lpropsys -lversion -lwinhttp -lpdh -lruntimeobject -loleaut32
 // @license         MIT
 // ==/WindhawkMod==
 
@@ -14,119 +14,37 @@
 /*
 # Fluid Shell
 
-Standalone mod that includes the whole *Fluid Launcher* (a fork of *Spotlight Launcher* by David Ravelo, MIT)
-and adds a side bar that replaces the Windows taskbar.
+A fluid desktop shell for Windows 11: everything grows out of one frame around the screen.
 
-## Side bar (0.1)
-* AppBar on the left or right edge: maximized windows stop at the bar.
-* Start button, launcher button, the open windows (click = activate or minimize, middle click = close),
-  clock, and a power button that opens the launcher in `>` command mode.
-* Optional: hides the native Windows taskbar while the bar is enabled.
+* **Bar (left)** - open apps as dots, the name of the active app, clock, Wi-Fi / volume / battery, power.
+  It replaces the Windows taskbar.
+* **Dashboard (top)** - clock, calendar, weather, volume and brightness sliders, a performance monitor and the
+  now-playing media card. Open it with **Ctrl + Alt + D** (configurable) or by resting the cursor on the top edge.
+* **Launcher (bottom)** - **Alt + Space**. Apps and Desktop shortcuts, calculator and unit conversion,
+  `>` for power / system commands (and `>wallpaper`), `@` for the window switcher.
+* **Overlay (right)** - volume and brightness. The Windows popup can be hidden.
 
-**If the taskbar ever goes missing:** press **Ctrl + Alt + Shift + T**. If that does not work, press
-Ctrl + Shift + Esc, select *Windows Explorer* and choose *Restart*. Disabling the mod also restores it.
+The layout is fixed on purpose; only the colors, a few texts and a few switches are configurable.
 
-## Launcher
-Alt + Space (configurable). Type to search apps and Desktop shortcuts. `>` for power / system commands,
-`@` for the window switcher, maths expressions for the calculator.
+*Based on Spotlight Launcher by David Ravelo (MIT).*
+
+## If something goes wrong
+* **Ctrl + Alt + Shift + T** brings the Windows taskbar back (press again to hide it again).
+* **Ctrl + Alt + Shift + R** rebuilds the shell (same as turning the mod off and on).
+* If the taskbar is ever missing: Ctrl + Shift + Esc, select *Windows Explorer*, *Restart*.
+* Turning the mod off always restores the taskbar.
+
+## Notes
+* Weather comes from wttr.in. Turn it off in the settings to stop all network requests.
+* Brightness needs a built-in laptop panel.
+* Colors: pick a preset, or type your own hex colors (for example `#1E1E2E`).
 */
 // ==/WindhawkModReadme==
 
 // ==WindhawkModSettings==
 /*
-- Hotkey: alt+space
-  $name: Keyboard shortcut
-  $options:
-  - alt+space: Alt + Space
-  - ctrl+space: Ctrl + Space
-  - ctrl+alt+space: Ctrl + Alt + Space
-  - shift+alt+space: Shift + Alt + Space
-  - ctrl+shift+space: Ctrl + Shift + Space
-- Position: custom
-  $name: Position preset
-  $description: Presets override the sliders below (Left/Right still use the vertical slider).
-  $options:
-  - custom: Custom (use the sliders)
-  - top: Top edge, centered
-  - bottom: Bottom edge, centered (list grows upward)
-  - left: Left edge
-  - right: Right edge
-  - center: Center of the screen
-- HorizontalPosition: 50
-  $name: Horizontal position (%)
-  $description: 0 = left edge, 50 = centered, 100 = right edge.
-- VerticalPosition: 30
-  $name: Vertical position (%)
-  $description: 0 = top edge, 100 = bottom edge.
-- EdgeMargin: 12
-  $name: Edge margin (DIP)
-  $description: Gap to the screen edge when docked. 0 = flush with the edge.
-- Placeholder: "Search applications…"
-  $name: Search bar placeholder text
-  $description: Shown when the bar is empty. Leave empty for the default.
-- WindowPrefix: at
-  $name: Window switcher prefix
-  $description: Type this first to list the open windows (">" is for commands).
-  $options:
-  - at: "@ (at sign)"
-  - hash: "# (hash)"
-  - lt: "< (less than)"
-  - off: Off
-- ConfirmPowerCommands: true
-  $name: Ask for a second Enter before Shutdown / Restart / Logout
-- Size: small
-  $name: Launcher size
-  $description: Size of the launcher only. The bar has its own size (BarScale).
-  $options:
-  - big: Big
-  - medium: Medium
-  - small: Small
-- CornerRadius: 20
-  $name: Corner radius (0-36)
-  $description: With real-time acrylic on Windows 11 the radius snaps to 0, 4 or 8.
-- NotchMode: false
-  $name: Notch mode
-  $description: Flat edge on the side docked to the screen edge, with concave flares so the bar looks like it grows out of the bezel. Forces edge margin 0 and turns real-time acrylic off. Use together with a Top/Bottom/Left/Right preset.
-- DockToScreenEdge: true
-  $name: Dock to the real screen edge
-  $description: Ignore the taskbar area (useful when the taskbar is hidden or auto-hide).
-- ListDirection: auto
-  $name: Result list direction
-  $options:
-  - auto: Auto (upward when the bar is in the lower part of the screen)
-  - down: Always downward
-  - up: Always upward
-- Animation: popup
-  $name: Open animation
-  $options:
-  - popup: Pop up
-  - fade: Fade
-  - slideBottom: Slide from bottom
-  - slideTop: Slide from top
-  - slideLeft: Slide from left
-  - slideRight: Slide from right
-  - none: None
-- AnimationBounce: soft
-  $name: Animation bounce
-  $description: Only the Pop up style overshoots. Slides and the card height settle without bouncing.
-  $options:
-  - none: None
-  - soft: Soft
-  - bouncy: Bouncy
-- AnimationDuration: 220
-  $name: Animation duration (ms)
-- AnimationFade: false
-  $name: Fade while sliding
-  $description: Pop up and Fade always fade.
-- SlideDistance: 0
-  $name: Slide distance (DIP)
-  $description: 0 = start from the screen edge. Otherwise slide this many DIP.
-- Borderless: true
-  $name: Borderless (no outline, no sheen)
-- Shadow: false
-  $name: Drop shadow
 - Color: midnight
-  $name: Color preset
+  $name: Theme - color preset
   $options:
   - midnight: Midnight
   - graphite: Graphite
@@ -141,121 +59,66 @@ Alt + Space (configurable). Type to search apps and Desktop shortcuts. `>` for p
   - sky: Sky
   - lavender: Lavender
 - CustomBackground: ""
-  $name: Custom background color (hex)
-  $description: Example #1E1E2E. Leave empty to use the preset. Light/dark text is chosen automatically.
+  $name: Theme - custom background color (hex)
+  $description: For example #1E1E2E. Leave empty to use the preset. Light or dark text is chosen automatically.
 - CustomAccent: ""
-  $name: Custom accent color (hex)
-  $description: Example #FF6A3D. Leave empty to use the preset.
-- Effect: solid
-  $name: Background effect
+  $name: Theme - custom accent color (hex)
+  $description: For example #FF6A3D. Leave empty to use the preset.
+- Animation: slide
+  $name: Animation style
+  $description: Used by the launcher, the dashboard and the overlay. Slide = every panel grows out of its own edge.
   $options:
-  - solid: Solid (simple)
-  - acrylic: Acrylic
-  - mica: Mica
-  - glass: Glass
-  - frosted: Frosted
-  - aurora: Aurora
-- Opacity: 90
-  $name: Opacity (70-100)
-- BlurAmount: 50
-  $name: Blur amount (0-100)
-- LiveAcrylic: true
-  $name: Real-time acrylic (Acrylic / Glass / Frosted / Aurora)
-- MaxResults: 8
-  $name: Maximum results (3-12)
-- ListMode: expanded
-  $name: List mode
+  - slide: Slide
+  - popup: Pop up
+  - fade: Fade
+  - none: None
+- Hotkey: alt+space
+  $name: Launcher - shortcut
   $options:
-  - expanded: Expanded (recent + suggestions)
-  - compact: Compact (only when typing)
-- DetailsKey: ctrl+i
-  $name: Details panel key
-  $options:
-  - ctrl+i: Ctrl + I
-  - ctrl+k: Ctrl + K
+  - alt+space: Alt + Space
   - ctrl+space: Ctrl + Space
-  - f4: F4
-- ScanDesktop: true
-  $name: Include Desktop shortcuts and programs
-- HideUtilityEntries: true
-  $name: Hide uninstallers and documentation
-- ReindexMode: auto
-  $name: App index updates
-  $options:
-  - auto: Automatic
-  - always: Every time it opens
-  - min1: Every 1 minute
-  - min3: Every 3 minutes
-  - min5: Every 5 minutes
-  - min10: Every 10 minutes
-- DisableInFullscreen: true
-  $name: Disable in fullscreen apps
-- CalculatorEnabled: true
-  $name: Inline calculator
-- CalculatorStyle: both
-  $name: Calculator style
-  $options:
-  - both: Card and inline text
-  - hero: Card only
-  - ghost: Inline text only
+  - ctrl+alt+space: Ctrl + Alt + Space
+  - shift+alt+space: Shift + Alt + Space
+  - ctrl+shift+space: Ctrl + Shift + Space
+- Placeholder: "Search applications…"
+  $name: Launcher - search bar text
+  $description: Shown when the bar is empty. Leave empty for the default.
+- WallpaperShortcut: alt+w
+  $name: Launcher - shortcut pressed by the Wallpaper command
+  $description: The ">wallpaper" command only presses this shortcut for your wallpaper app. Modifiers ctrl / alt / shift / win plus one key, for example alt+w.
 - SoundEnabled: true
-  $name: Interface sounds
-- SoundVolume: 70
-  $name: Sound volume (0-100)
-- BarEnabled: true
-  $name: Side bar (taskbar replacement)
-- BarSide: left
-  $name: Bar side
-  $options:
-  - left: Left
-  - right: Right
-- BarWidth: 56
-  $name: Bar width (DIP, 36-120)
-- BarGap: 8
-  $name: Gap between the bar and windows (DIP)
+  $name: Launcher - typing and opening sounds
 - BarClock24h: true
-  $name: 24-hour clock in the bar
-- DashboardEnabled: true
-  $name: Dashboard panel (grows out of the top of the frame)
+  $name: Bar - 24-hour clock
+- BarIgnore: ""
+  $name: Bar - hide these apps
+  $description: Process names or title fragments separated by ; or , - for example lively;glazewm
+- HideNativeTaskbar: true
+  $name: Bar - hide the Windows taskbar
+  $description: Emergency restore - Ctrl + Alt + Shift + T. Rebuild the shell - Ctrl + Alt + Shift + R.
 - DashboardHotkey: ctrlaltd
-  $name: Dashboard shortcut
+  $name: Dashboard - shortcut
   $options:
   - ctrlaltd: Ctrl + Alt + D
   - altshiftd: Alt + Shift + D
   - winshiftd: Win + Shift + D
 - DashboardHotEdge: true
-  $name: Open the dashboard by resting the cursor on the top frame
-  $description: Only the middle of the top frame counts, with a short delay, never while dragging and never in fullscreen apps.
-- HotEdgeDelay: 250
-  $name: Hot edge delay (ms)
-- FrameEnabled: true
-  $name: Screen frame (border around the screen)
-  $description: Draws a border with rounded inner corners that merges with the bar. Works best with the Windows taskbar hidden (HideNativeTaskbar).
-- FrameThickness: 7
-  $name: Frame thickness (DIP, 2-40)
-- FrameCornerRadius: 10
-  $name: Frame inner corner radius (DIP, 2-36)
-  $description: Smaller = less rounded, closer to the square corners of windows. The launcher follows it while the frame is on.
-- WindowGap: 8
-  $name: Gap between maximized windows and the frame / bar (DIP)
-  $description: 0 = windows touch the frame. Only applies while the frame is on.
-- BarShowStatus: true
-  $name: Show Wi-Fi, volume and battery in the bar
-- BarScale: 65
-  $name: Bar size (% of the normal size, 40-150)
-  $description: Shrinks the whole bar. 65 is roughly two thirds of the previous size.
-- BarShowIcons: false
-  $name: Show app icons instead of dots
-  $description: Dots only by default. Store apps (like Settings) may have no icon in icon mode.
-- BarFlushToEdge: true
-  $name: Glue the bar to the real screen edge
-  $description: Ignores other AppBars / overlays that already reserve that edge.
-- BarIgnore: ""
-  $name: Hide these apps from the bar
-  $description: Process names or title fragments separated by ; or , - for example lively;glazewm
-- HideNativeTaskbar: true
-  $name: Hide the Windows taskbar while the bar is enabled
-  $description: Emergency restore shortcut - Ctrl + Alt + Shift + T. Tip - test the bar first with this turned off.
+  $name: Dashboard - open by resting the cursor on the top edge
+  $description: Only the middle of the top edge counts, with a short delay, never while dragging and never in fullscreen apps.
+- WeatherEnabled: true
+  $name: Dashboard - weather (wttr.in)
+  $description: Asks wttr.in for the weather every 20 minutes while the shell runs. Turn off to stop these network requests.
+- WeatherLocation: ""
+  $name: Dashboard - weather location
+  $description: City name, for example Bandung. Empty = guessed from your IP address by wttr.in.
+- WeatherUnits: metric
+  $name: Dashboard - weather units
+  $options:
+  - metric: Metric (Celsius)
+  - imperial: Imperial (Fahrenheit)
+- HideSystemOsd: true
+  $name: System - hide the Windows volume / brightness popup
+  $description: Windows 11. The popup is hidden only when the volume or brightness really changed a moment ago, so Alt+Tab, Task View and other Explorer flyouts are left alone.
 */
 // ==/WindhawkModSettings==
 
@@ -284,6 +147,15 @@ Alt + Space (configurable). Type to search apps and Desktop shortcuts. `>` for p
 #include <audiopolicy.h>
 #include <endpointvolume.h>
 #include <mmdeviceapi.h>
+#include <winhttp.h>
+#include <pdh.h>
+#include <unknwn.h>
+#include <chrono>
+#include <winrt/base.h>
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.Media.Control.h>
+#include <winrt/Windows.Storage.Streams.h>
 
 // Implemented by the Fluid Shell module further down.
 namespace FluidShell {
@@ -1416,6 +1288,7 @@ struct LauncherSettings {
     bool dockScreenEdge = true;
     double uiSize = 1.0;  // 1.0 big, medium / small shrink the whole UI
     double bounceZeta = 0.72;  // spring damping ratio of the Pop up animation
+    std::wstring wallpaperKey = L"alt+w";
     bool confirmPower = true;
     std::wstring placeholder;
     wchar_t winPrefix = L'@';  // 0 = window switcher off
@@ -1935,6 +1808,8 @@ static void LoadSettings() {
         std::wstring bn = GetStringSetting(L"AnimationBounce");
         c.bounceZeta = (bn == L"none") ? 1.0 : (bn == L"bouncy") ? 0.5 : 0.72;
     }
+    c.wallpaperKey = GetStringSetting(L"WallpaperShortcut");
+    if (c.wallpaperKey.empty()) c.wallpaperKey = L"alt+w";
     c.animFade = Wh_GetIntSetting(L"AnimationFade") != 0;
     c.slideDist = std::clamp(Wh_GetIntSetting(L"SlideDistance"), 0, 4000);
     {
@@ -1964,6 +1839,46 @@ static void LoadSettings() {
         std::wstring wp = GetStringSetting(L"WindowPrefix");
         c.winPrefix = (wp == L"hash") ? L'#' : (wp == L"lt") ? L'<' : (wp == L"off") ? L'\0' : L'@';
     }
+
+    // ---- Fixed layout: the shape of the shell is not configurable ----
+    {
+        const std::wstring an = GetStringSetting(L"Animation");  // slide (default) / popup / fade / none
+        c.anim = (an == L"none")    ? AnimStyle::None
+                 : (an == L"fade")  ? AnimStyle::Fade
+                 : (an == L"popup") ? AnimStyle::Popup
+                                    : AnimStyle::SlideBottom;  // every slide style means "from the panel's own edge"
+    }
+    c.animMs = 220;
+    c.animFade = false;
+    c.slideDist = 0;
+    c.bounceZeta = 0.72;
+    c.preset = PosPreset::Bottom;  // the launcher lives at the bottom, docked to the frame
+    c.listDir = ListDir::Auto;
+    c.horizPct = 50;
+    c.verticalPct = 100;
+    c.edgeMargin = 0;
+    c.maxRows = 8;
+    c.listMode = ListMode::Expanded;
+    c.detailsKey = DetailsKey::CtrlI;
+    c.reindexMode = ReindexMode::Auto;
+    c.reindexIntervalSec = 0;
+    c.opacityPct = 100;
+    c.effect = BgEffect::Solid;
+    c.blurPct = 50;
+    c.liveAcrylic = false;
+    c.borderless = true;
+    c.shadow = false;
+    c.notch = false;
+    c.dockScreenEdge = true;
+    c.cornerRadius = 10;
+    c.uiSize = 0.76;  // small launcher
+    c.hideUtility = true;
+    c.disableFullscreen = true;
+    c.scanDesktop = true;
+    c.calculatorEnabled = true;
+    c.calcStyle = CalcStyle::Both;
+    c.soundVolume = 70;
+    c.confirmPower = true;
 
     g_cfg = c;
 }
@@ -2882,7 +2797,7 @@ static void AddCalcHistory(const std::wstring& expr, const std::wstring& resFmt,
 enum CmdId {
     CMD_SHUTDOWN = 0, CMD_RESTART, CMD_SLEEP, CMD_LOGOUT, CMD_LOCK,
     CMD_HIBERNATE, CMD_MUTE, CMD_VOLUP, CMD_VOLDOWN, CMD_PLAYPAUSE, CMD_NEXT, CMD_PREV,
-    CMD_DARKMODE, CMD_DISPLAYOFF, CMD_SHOWDESKTOP, CMD_RECYCLE
+    CMD_DARKMODE, CMD_DISPLAYOFF, CMD_SHOWDESKTOP, CMD_RECYCLE, CMD_WALLPAPER
 };
 
 struct CmdDef {
@@ -2908,6 +2823,7 @@ static const CmdDef kCmds[] = {
     {CMD_DISPLAYOFF, L"Turn off display", L"screen monitor off"},
     {CMD_SHOWDESKTOP, L"Show desktop", L"minimize all windows"},
     {CMD_RECYCLE, L"Empty Recycle Bin", L"trash bin delete"},
+    {CMD_WALLPAPER, L"Wallpaper", L"wall background change theme"},
 };
 
 static int g_cmdArmed = -1;       // app index of the command waiting for a second Enter
@@ -6451,6 +6367,16 @@ static void DrawCmdTile(int cmd, float x, float y, float size) {
             line(cx - r * 0.45f, cy + r * 0.9f, cx + r * 0.45f, cy + r * 0.9f);
             line(cx + r * 0.45f, cy + r * 0.9f, cx + r * 0.6f, cy - r * 0.55f);
             break;
+        case CMD_WALLPAPER:  // a picture: frame + hills
+            line(cx - r, cy - r * 0.75f, cx + r, cy - r * 0.75f);
+            line(cx + r, cy - r * 0.75f, cx + r, cy + r * 0.75f);
+            line(cx + r, cy + r * 0.75f, cx - r, cy + r * 0.75f);
+            line(cx - r, cy + r * 0.75f, cx - r, cy - r * 0.75f);
+            line(cx - r, cy + r * 0.45f, cx - r * 0.3f, cy - r * 0.1f);
+            line(cx - r * 0.3f, cy - r * 0.1f, cx + r * 0.2f, cy + r * 0.3f);
+            line(cx + r * 0.2f, cy + r * 0.3f, cx + r * 0.55f, cy + r * 0.05f);
+            line(cx + r * 0.55f, cy + r * 0.05f, cx + r, cy + r * 0.45f);
+            break;
     }
 }
 
@@ -7319,6 +7245,52 @@ static void SendWinD() {
     SendInput(4, in, sizeof(INPUT));
 }
 
+// Presses a shortcut such as "alt+w" or "ctrl+shift+f5" (used by the Wallpaper command).
+static void SendChord(const std::wstring& spec) {
+    std::vector<WORD> mods;
+    WORD key = 0;
+    const std::wstring t = LowerAscii(spec);
+    size_t p = 0;
+    while (p <= t.size()) {
+        size_t e = t.find(L'+', p);
+        if (e == std::wstring::npos) e = t.size();
+        std::wstring tok = t.substr(p, e - p);
+        while (!tok.empty() && tok.front() == L' ') tok.erase(tok.begin());
+        while (!tok.empty() && tok.back() == L' ') tok.pop_back();
+        if (tok == L"ctrl" || tok == L"control") {
+            mods.push_back(VK_CONTROL);
+        } else if (tok == L"alt") {
+            mods.push_back(VK_MENU);
+        } else if (tok == L"shift") {
+            mods.push_back(VK_SHIFT);
+        } else if (tok == L"win" || tok == L"windows") {
+            mods.push_back(VK_LWIN);
+        } else if (tok.size() == 1) {
+            const wchar_t c = tok[0];
+            if (c >= L'a' && c <= L'z') key = (WORD)(c - L'a' + L'A');
+            if (c >= L'0' && c <= L'9') key = (WORD)c;
+        } else if (tok.size() >= 2 && tok[0] == L'f') {
+            const int n = _wtoi(tok.c_str() + 1);
+            if (n >= 1 && n <= 24) key = (WORD)(VK_F1 + n - 1);
+        }
+        p = e + 1;
+    }
+    if (!key) return;
+    std::vector<INPUT> in;
+    auto add = [&](WORD vk, bool up) {
+        INPUT i = {};
+        i.type = INPUT_KEYBOARD;
+        i.ki.wVk = vk;
+        if (up) i.ki.dwFlags = KEYEVENTF_KEYUP;
+        in.push_back(i);
+    };
+    for (WORD m : mods) add(m, false);
+    add(key, false);
+    add(key, true);
+    for (auto it = mods.rbegin(); it != mods.rend(); ++it) add(*it, true);
+    SendInput((UINT)in.size(), in.data(), sizeof(INPUT));
+}
+
 static void ToggleDarkMode() {
     HKEY k = nullptr;
     if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", 0,
@@ -7412,6 +7384,9 @@ static void RunPowerCommand(int cmd, int appIdx) {
             break;
         case CMD_RECYCLE:
             SHEmptyRecycleBinW(nullptr, nullptr, SHERB_NOCONFIRMATION | SHERB_NOPROGRESSUI | SHERB_NOSOUND);
+            break;
+        case CMD_WALLPAPER:
+            SendChord(g_cfg.wallpaperKey);  // the wallpaper app reacts to its own shortcut
             break;
     }
 }
@@ -8195,6 +8170,14 @@ struct Cfg {
     int dashKey = 0;  // 0 Ctrl+Alt+D, 1 Alt+Shift+D, 2 Win+Shift+D
     bool hotEdge = true;
     int hotEdgeMs = 250;
+    bool weather = true;
+    std::wstring wxLoc;
+    bool wxMetric = true;
+    bool brightness = true;
+    int osdVol = 0;      // 0 left, 1 right, 2 top, 3 bottom, 4 off
+    int osdBright = 1;
+    int osdMs = 1600;
+    bool hideSysOsd = true;
     std::wstring ignore;  // lowercase, separated by ; or ,
 };
 static Cfg cfg;
@@ -8221,6 +8204,11 @@ static const UINT_PTR T_TICK = 102;
 static const UINT_PTR T_POS = 103;
 static const UINT_PTR T_DASH = 104;   // dashboard animation
 static const UINT_PTR T_EDGE = 105;   // hot edge polling / auto close
+static const UINT_PTR T_MARQ = 106;   // scrolling text in the dashboard
+static const UINT_PTR T_BOOT = 107;   // rebuild after a fresh boot
+static const UINT_PTR T_OSD = 108;    // overlay animation / auto hide
+static const UINT_PTR T_OSDPOLL = 109;  // watches volume and brightness
+static const int HK_REBUILD = 79;     // Ctrl+Alt+Shift+R
 static const int HK_DASH = 78;
 static const int HK_TASKBAR = 77;
 
@@ -8259,6 +8247,12 @@ static double sDashK = 1.0;           // 1 = closed, 0 = fully open (spring stat
 static double sDashV = 0.0;
 static void DashApply();              // defined with the dashboard code further down
 static void DashShutdown();
+static HWND sOsd = nullptr;           // volume / brightness overlay window
+static bool sOsdWanted = false;       // visible (or appearing)
+static double sOsdK = 1.0;            // 1 = hidden, 0 = shown (spring state)
+static double sOsdV = 0.0;
+static void OsdApply();               // defined with the overlay code further down
+static void OsdShutdown();
 static bool sFsApp = false;       // Windows told us a fullscreen app is active (ABN_FULLSCREENAPP)
 static bool sSuppressed = false;  // the bar is hidden because of a fullscreen app
 
@@ -8298,8 +8292,42 @@ static void LoadCfg() {
         int hm = Wh_GetIntSetting(L"HotEdgeDelay");
         if (hm <= 0) hm = 250;
         n.hotEdgeMs = std::clamp(hm, 50, 2000);
+        n.weather = Wh_GetIntSetting(L"WeatherEnabled") != 0;
+        n.wxLoc = GetStringSetting(L"WeatherLocation");
+        n.wxMetric = GetStringSetting(L"WeatherUnits") != L"imperial";
+        n.brightness = Wh_GetIntSetting(L"BrightnessControl") != 0;
+        n.hideSysOsd = Wh_GetIntSetting(L"HideSystemOsd") != 0;
+        {
+            auto pos = [](const std::wstring& v, int def) {
+                return v == L"left" ? 0 : v == L"right" ? 1 : v == L"top" ? 2 : v == L"bottom" ? 3 : v == L"off" ? 4 : def;
+            };
+            n.osdVol = pos(GetStringSetting(L"OsdVolumePosition"), 0);
+            n.osdBright = pos(GetStringSetting(L"OsdBrightnessPosition"), 1);
+            int om = Wh_GetIntSetting(L"OsdDuration");
+            if (om <= 0) om = 1600;
+            n.osdMs = std::clamp(om, 500, 10000);
+        }
     }
     n.ignore = LowerAscii(GetStringSetting(L"BarIgnore"));
+    // ---- Fixed layout: bar on the left, notch on top, overlay on the right ----
+    n.bar = true;
+    n.left = true;
+    n.width = 56;
+    n.gap = 8;
+    n.scalePct = 65;
+    n.status = true;
+    n.icons = false;
+    n.flush = true;
+    n.frame = true;
+    n.frameThick = 7;
+    n.windowGap = 8;
+    n.frameRadius = 10;
+    n.dash = true;
+    n.hotEdgeMs = 250;
+    n.brightness = true;
+    n.osdVol = 1;     // right
+    n.osdBright = 1;  // right
+    n.osdMs = 1600;
     cfg = n;
 }
 
@@ -9119,6 +9147,12 @@ static void PositionFrame(const RECT& mon) {
 static void ShowAll(bool show) {
     const int cmd = show ? SW_SHOWNOACTIVATE : SW_HIDE;
     if (sBar) ShowWindow(sBar, cmd);
+    if (!show && sOsd) {  // nor the overlay
+        sOsdWanted = false;
+        sOsdK = 1.0;
+        sOsdV = 0.0;
+        ShowWindow(sOsd, SW_HIDE);
+    }
     if (!show && sDash) {  // never leave the dashboard over a fullscreen app
         sDashWanted = false;
         sDashK = 1.0;
@@ -9553,6 +9587,9 @@ static void PositionBar() {
 
     const bool same = EqualRect(&sRect, &abd.rc) && IsWindowVisible(sBar);
     sRect = abd.rc;
+    Wh_Log(L"Fluid Shell: bar at %d,%d %dx%d (monitor %dx%d, scale %.2f)", (int)abd.rc.left, (int)abd.rc.top,
+           (int)(abd.rc.right - abd.rc.left), (int)(abd.rc.bottom - abd.rc.top),
+           (int)(mi.rcMonitor.right - mi.rcMonitor.left), (int)(mi.rcMonitor.bottom - mi.rcMonitor.top), sScale);
     if (!same) {
         SetWindowPos(sBar, HWND_TOPMOST, sRect.left, sRect.top, sRect.right - sRect.left,
                      sRect.bottom - sRect.top, SWP_NOACTIVATE | (sSuppressed ? 0 : SWP_SHOWWINDOW));
@@ -9583,6 +9620,7 @@ static void Apply() {
         ShowWindow(sBar, SW_HIDE);
         TeardownFrame();
         DashApply();
+        OsdApply();
         RemoveEvHook();
         SetTaskbarHidden(false);
         return;
@@ -9608,10 +9646,1098 @@ static void Apply() {
     sRect = RECT{};  // force a re-placement with the new settings
     PositionBar();
     DashApply();
+    OsdApply();
     SetTimer(sBar, T_TICK, 500, nullptr);
 }
 
 // ---------------------------------------------------------------- input
+// ===== Weather: wttr.in through WinHTTP, fetched in a background thread =====
+static const UINT WM_WX_UPDATED = WM_APP + 0x32;
+
+struct WxSnap {
+    bool valid = false;
+    bool failed = false;
+    std::wstring cond, temp, feels, humidity;
+    ULONGLONG at = 0;
+};
+static WxSnap sWx;
+static CRITICAL_SECTION sWxCs;
+static bool sWxCsInit = false;
+static HANDLE sWxThread = nullptr;
+static HANDLE sWxStop = nullptr;
+static HANDLE sWxWake = nullptr;
+static std::wstring sWxLoc;  // copies of the settings, guarded by sWxCs
+static bool sWxMetric = true;
+
+// Percent-encodes UTF-8 (non-ASCII city names must not be sent raw).
+static std::string UrlEncodeUtf8(const std::wstring& w) {
+    std::string out;
+    if (w.empty()) return out;
+    char u8[512] = {};
+    const int n = WideCharToMultiByte(CP_UTF8, 0, w.c_str(), (int)w.size(), u8, 511, nullptr, nullptr);
+    for (int i = 0; i < n; ++i) {
+        const unsigned char c = (unsigned char)u8[i];
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_' ||
+            c == '.' || c == '~') {
+            out.push_back((char)c);
+        } else {
+            char hex[4] = {};
+            sprintf_s(hex, "%%%02X", (unsigned)c);
+            out += hex;
+        }
+    }
+    return out;
+}
+
+static bool WxHttpGet(const std::wstring& path, std::string& body) {
+    bool ok = false;
+    HINTERNET ses = WinHttpOpen(L"FluidShell/1.0", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, WINHTTP_NO_PROXY_NAME,
+                                WINHTTP_NO_PROXY_BYPASS, 0);
+    if (!ses) return false;
+    WinHttpSetTimeouts(ses, 5000, 5000, 8000, 8000);
+    HINTERNET con = WinHttpConnect(ses, L"wttr.in", INTERNET_DEFAULT_HTTPS_PORT, 0);
+    HINTERNET req = con ? WinHttpOpenRequest(con, L"GET", path.c_str(), nullptr, WINHTTP_NO_REFERER,
+                                             WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_SECURE)
+                        : nullptr;
+    if (req && WinHttpSendRequest(req, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0) &&
+        WinHttpReceiveResponse(req, nullptr)) {
+        DWORD code = 0, sz = sizeof(code);
+        WinHttpQueryHeaders(req, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, WINHTTP_HEADER_NAME_BY_INDEX,
+                            &code, &sz, WINHTTP_NO_HEADER_INDEX);
+        if (code == 200) {
+            DWORD avail = 0;
+            while (body.size() < 2048 && WinHttpQueryDataAvailable(req, &avail) && avail > 0) {
+                char buf[512];
+                DWORD rd = 0;
+                if (!WinHttpReadData(req, buf, std::min<DWORD>(avail, (DWORD)sizeof(buf)), &rd) || rd == 0) break;
+                body.append(buf, rd);
+            }
+            ok = !body.empty();
+        }
+    }
+    if (req) WinHttpCloseHandle(req);
+    if (con) WinHttpCloseHandle(con);
+    WinHttpCloseHandle(ses);
+    return ok;
+}
+
+// "Partly cloudy|+27°C|+29°C|70%"  (condition | temperature | feels like | humidity)
+static bool WxParse(const std::string& body, WxSnap& out) {
+    if (body.find('|') == std::string::npos) return false;  // error pages / unknown locations have no separators
+    wchar_t wb[512] = {};
+    const int n = MultiByteToWideChar(CP_UTF8, 0, body.c_str(), (int)body.size(), wb, 511);
+    if (n <= 0) return false;
+    const std::wstring all(wb, n);
+    std::vector<std::wstring> parts;
+    size_t p = 0;
+    for (;;) {
+        const size_t e = all.find(L'|', p);
+        if (e == std::wstring::npos) {
+            parts.push_back(all.substr(p));
+            break;
+        }
+        parts.push_back(all.substr(p, e - p));
+        p = e + 1;
+    }
+    if (parts.size() < 4) return false;
+    auto clean = [](std::wstring t) {
+        while (!t.empty() && (t.front() == L' ' || t.front() == L'\n' || t.front() == L'\r')) t.erase(t.begin());
+        while (!t.empty() && (t.back() == L' ' || t.back() == L'\n' || t.back() == L'\r')) t.pop_back();
+        return t;
+    };
+    out.cond = clean(parts[0]);
+    out.temp = clean(parts[1]);
+    out.feels = clean(parts[2]);
+    out.humidity = clean(parts[3]);
+    if (!out.temp.empty() && out.temp[0] == L'+') out.temp.erase(0, 1);
+    if (!out.feels.empty() && out.feels[0] == L'+') out.feels.erase(0, 1);
+    return !out.cond.empty() && !out.temp.empty();
+}
+
+static DWORD WINAPI WxThreadProc(LPVOID) {
+    for (;;) {
+        std::wstring loc;
+        bool metric = true;
+        EnterCriticalSection(&sWxCs);
+        loc = sWxLoc;
+        metric = sWxMetric;
+        LeaveCriticalSection(&sWxCs);
+
+        const std::string enc = UrlEncodeUtf8(loc);
+        std::wstring path = L"/";
+        for (char c : enc) path.push_back((wchar_t)(unsigned char)c);
+        path += L"?format=%25C%7C%25t%7C%25f%7C%25h&";
+        path += metric ? L"m" : L"u";
+
+        std::string body;
+        WxSnap snap;
+        const bool ok = WxHttpGet(path, body) && WxParse(body, snap);
+        EnterCriticalSection(&sWxCs);
+        if (ok) {
+            snap.valid = true;
+            snap.at = GetTickCount64();
+            sWx = snap;
+        } else {
+            sWx.failed = true;  // an older valid result (if any) is kept
+        }
+        LeaveCriticalSection(&sWxCs);
+        if (sBar) PostMessageW(sBar, WM_WX_UPDATED, 0, 0);
+
+        HANDLE hs[2] = {sWxStop, sWxWake};
+        const DWORD wait = WaitForMultipleObjects(2, hs, FALSE, ok ? 20 * 60 * 1000 : 2 * 60 * 1000);
+        if (wait == WAIT_OBJECT_0) break;
+    }
+    return 0;
+}
+
+static void WeatherStart() {
+    if (!sWxCsInit) {
+        InitializeCriticalSection(&sWxCs);
+        sWxCsInit = true;
+    }
+    EnterCriticalSection(&sWxCs);
+    const bool changed = sWxLoc != cfg.wxLoc || sWxMetric != cfg.wxMetric;
+    sWxLoc = cfg.wxLoc;
+    sWxMetric = cfg.wxMetric;
+    if (changed) sWx = WxSnap();
+    LeaveCriticalSection(&sWxCs);
+    if (!sWxThread) {
+        sWxStop = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+        sWxWake = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+        if (sWxStop && sWxWake) sWxThread = CreateThread(nullptr, 0, WxThreadProc, nullptr, 0, nullptr);
+    } else if (changed) {
+        SetEvent(sWxWake);
+    }
+}
+
+static void WeatherStop() {
+    if (!sWxThread) return;
+    SetEvent(sWxStop);
+    WaitForSingleObject(sWxThread, 3000);
+    CloseHandle(sWxThread);
+    CloseHandle(sWxStop);
+    CloseHandle(sWxWake);
+    sWxThread = nullptr;
+    sWxStop = nullptr;
+    sWxWake = nullptr;
+}
+
+// Called when the dashboard opens: refresh when the data is older than 10 minutes.
+static void WeatherPoke() {
+    if (!sWxThread || !sWxCsInit) return;
+    EnterCriticalSection(&sWxCs);
+    const bool stale = !sWx.valid || GetTickCount64() - sWx.at > 10ULL * 60ULL * 1000ULL;
+    LeaveCriticalSection(&sWxCs);
+    if (stale) SetEvent(sWxWake);
+}
+
+static void WeatherGet(WxSnap& out) {
+    if (!sWxCsInit) return;
+    EnterCriticalSection(&sWxCs);
+    out = sWx;
+    LeaveCriticalSection(&sWxCs);
+}
+
+// 1 sun, 2 partly cloudy, 3 cloud, 4 rain, 5 snow, 6 thunderstorm, 7 fog, 0 unknown
+static int WxKind(const std::wstring& cond) {
+    const std::wstring c = LowerAscii(cond);
+    auto has = [&](const wchar_t* k) { return c.find(k) != std::wstring::npos; };
+    if (has(L"thunder")) return 6;
+    if (has(L"snow") || has(L"sleet") || has(L"blizzard") || has(L"ice")) return 5;
+    if (has(L"rain") || has(L"drizzle") || has(L"shower")) return 4;
+    if (has(L"fog") || has(L"mist") || has(L"haze")) return 7;
+    if (has(L"partly")) return 2;
+    if (has(L"cloud") || has(L"overcast")) return 3;
+    if (has(L"sun") || has(L"clear")) return 1;
+    return 0;
+}
+
+// ===== Performance monitor: sampled in a background thread, only while the Performance tab is open =====
+static const UINT WM_PERF_UPDATED = WM_APP + 0x33;
+
+struct PerfSnap {
+    bool valid = false;
+    float cpu = 0.f;
+    float ram = 0.f;
+    double ramUsed = 0.0, ramTotal = 0.0;    // GB
+    float disk = 0.f;
+    double diskUsed = 0.0, diskTotal = 0.0;  // GB
+    float gpu = -1.f;                        // -1 = not available
+    double netDown = 0.0, netUp = 0.0;       // bytes per second
+};
+static PerfSnap sPerf;
+static CRITICAL_SECTION sPerfCs;
+static bool sPerfCsInit = false;
+static HANDLE sPerfThread = nullptr;
+static HANDLE sPerfStop = nullptr;
+static HANDLE sPerfWake = nullptr;
+static volatile LONG sPerfActive = 0;
+
+#ifndef PDH_MORE_DATA
+#define PDH_MORE_DATA ((PDH_STATUS)0x800007D2L)  // normally from pdhmsg.h
+#endif
+
+// Sum of a wildcard PDH counter (all instances, or only those whose name contains `nameFilter`).
+static double PdhSumArray(PDH_HCOUNTER c, const wchar_t* nameFilter) {
+    DWORD size = 0, count = 0;
+    PDH_STATUS st = PdhGetFormattedCounterArrayW(c, PDH_FMT_DOUBLE, &size, &count, nullptr);
+    if (st != PDH_MORE_DATA || size == 0) return -1.0;
+    std::vector<BYTE> buf(size);
+    PDH_FMT_COUNTERVALUE_ITEM_W* items = reinterpret_cast<PDH_FMT_COUNTERVALUE_ITEM_W*>(buf.data());
+    if (PdhGetFormattedCounterArrayW(c, PDH_FMT_DOUBLE, &size, &count, items) != ERROR_SUCCESS) return -1.0;
+    double total = 0.0;
+    for (DWORD i = 0; i < count; ++i) {
+        if (items[i].FmtValue.CStatus > 1) continue;  // 0 = valid, 1 = new data; anything else is an error
+        if (nameFilter && !(items[i].szName && wcsstr(items[i].szName, nameFilter))) continue;
+        total += items[i].FmtValue.doubleValue;
+    }
+    return total;
+}
+
+static DWORD WINAPI PerfThreadProc(LPVOID) {
+    PDH_HQUERY q = nullptr;
+    PDH_HCOUNTER cGpu = nullptr, cRx = nullptr, cTx = nullptr;
+    if (PdhOpenQueryW(nullptr, 0, &q) == ERROR_SUCCESS) {
+        if (PdhAddEnglishCounterW(q, L"\\GPU Engine(*)\\Utilization Percentage", 0, &cGpu) != ERROR_SUCCESS) cGpu = nullptr;
+        if (PdhAddEnglishCounterW(q, L"\\Network Interface(*)\\Bytes Received/sec", 0, &cRx) != ERROR_SUCCESS) cRx = nullptr;
+        if (PdhAddEnglishCounterW(q, L"\\Network Interface(*)\\Bytes Sent/sec", 0, &cTx) != ERROR_SUCCESS) cTx = nullptr;
+        PdhCollectQueryData(q);
+    } else {
+        q = nullptr;
+    }
+    auto u64 = [](const FILETIME& f) { return ((ULONGLONG)f.dwHighDateTime << 32) | f.dwLowDateTime; };
+    ULONGLONG pIdle = 0, pKern = 0, pUser = 0;
+    bool havePrev = false, quit = false;
+    while (!quit) {
+        if (!sPerfActive) {  // tab closed: sleep until it opens again
+            havePrev = false;
+            HANDLE hs[2] = {sPerfStop, sPerfWake};
+            if (WaitForMultipleObjects(2, hs, FALSE, INFINITE) == WAIT_OBJECT_0) break;
+            if (!sPerfActive) continue;
+            if (q) PdhCollectQueryData(q);  // prime the rate counters
+        }
+
+        FILETIME fi = {}, fk = {}, fu = {};
+        GetSystemTimes(&fi, &fk, &fu);
+        const ULONGLONG idle = u64(fi), kern = u64(fk), user = u64(fu);
+        float cpu = 0.f;
+        if (havePrev) {
+            const ULONGLONG dIdle = idle - pIdle;
+            const ULONGLONG dTotal = (kern - pKern) + (user - pUser);  // kernel time includes idle time
+            if (dTotal > 0) cpu = (float)(100.0 * (1.0 - (double)dIdle / (double)dTotal));
+        }
+        pIdle = idle;
+        pKern = kern;
+        pUser = user;
+
+        PerfSnap snap;
+        snap.cpu = std::clamp(cpu, 0.f, 100.f);
+        MEMORYSTATUSEX ms = {};
+        ms.dwLength = sizeof(ms);
+        if (GlobalMemoryStatusEx(&ms)) {
+            snap.ram = (float)ms.dwMemoryLoad;
+            snap.ramTotal = (double)ms.ullTotalPhys / 1073741824.0;
+            snap.ramUsed = (double)(ms.ullTotalPhys - ms.ullAvailPhys) / 1073741824.0;
+        }
+        wchar_t sys[MAX_PATH] = {};
+        GetSystemDirectoryW(sys, MAX_PATH);
+        wchar_t root[4] = {sys[0] ? sys[0] : L'C', L':', L'\\', 0};
+        ULARGE_INTEGER freeToCaller = {}, total = {}, totalFree = {};
+        if (GetDiskFreeSpaceExW(root, &freeToCaller, &total, &totalFree) && total.QuadPart > 0) {
+            const double used = (double)(total.QuadPart - totalFree.QuadPart);
+            snap.diskTotal = (double)total.QuadPart / 1073741824.0;
+            snap.diskUsed = used / 1073741824.0;
+            snap.disk = (float)(100.0 * used / (double)total.QuadPart);
+        }
+        if (q && PdhCollectQueryData(q) == ERROR_SUCCESS) {
+            if (cGpu) {
+                const double g = PdhSumArray(cGpu, L"engtype_3D");
+                if (g >= 0.0) snap.gpu = (float)std::min(g, 100.0);
+            }
+            if (cRx) snap.netDown = std::max(0.0, PdhSumArray(cRx, nullptr));
+            if (cTx) snap.netUp = std::max(0.0, PdhSumArray(cTx, nullptr));
+        }
+        snap.valid = havePrev;  // the first sample after opening has no CPU delta yet
+        havePrev = true;
+
+        EnterCriticalSection(&sPerfCs);
+        sPerf = snap;
+        LeaveCriticalSection(&sPerfCs);
+        if (snap.valid && sBar) PostMessageW(sBar, WM_PERF_UPDATED, 0, 0);
+
+        if (WaitForSingleObject(sPerfStop, 1000) == WAIT_OBJECT_0) quit = true;
+    }
+    if (q) PdhCloseQuery(q);
+    return 0;
+}
+
+static void PerfWant(bool on) {
+    static bool last = false;
+    if (on == last) return;
+    last = on;
+    if (on) {
+        if (!sPerfCsInit) {
+            InitializeCriticalSection(&sPerfCs);
+            sPerfCsInit = true;
+        }
+        if (!sPerfThread) {
+            sPerfStop = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+            sPerfWake = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+            if (sPerfStop && sPerfWake) sPerfThread = CreateThread(nullptr, 0, PerfThreadProc, nullptr, 0, nullptr);
+        }
+        InterlockedExchange(&sPerfActive, 1);
+        if (sPerfWake) SetEvent(sPerfWake);
+    } else {
+        InterlockedExchange(&sPerfActive, 0);
+    }
+}
+
+static void PerfStop() {
+    InterlockedExchange(&sPerfActive, 0);
+    if (!sPerfThread) return;
+    SetEvent(sPerfStop);
+    WaitForSingleObject(sPerfThread, 3000);
+    CloseHandle(sPerfThread);
+    CloseHandle(sPerfStop);
+    CloseHandle(sPerfWake);
+    sPerfThread = nullptr;
+    sPerfStop = nullptr;
+    sPerfWake = nullptr;
+}
+
+static void PerfGet(PerfSnap& out) {
+    if (!sPerfCsInit) return;
+    EnterCriticalSection(&sPerfCs);
+    out = sPerf;
+    LeaveCriticalSection(&sPerfCs);
+}
+
+// ===== Brightness: built-in panel through the video IOCTLs (no WMI) =====
+struct DispBright {  // DISPLAY_BRIGHTNESS from ntddvdeo.h
+    UCHAR policy;    // bit 0 = AC level valid, bit 1 = DC level valid
+    UCHAR ac;
+    UCHAR dc;
+};
+struct BrightState {
+    bool has = false;
+    int level = 0;  // 0..100
+};
+static BrightState sBright;
+static ULONGLONG sBrightRetryAt = 0;
+
+static HANDLE OpenLcd(bool write) {
+    return CreateFileW(L"\\\\.\\LCD", write ? (GENERIC_READ | GENERIC_WRITE) : GENERIC_READ,
+                       FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
+}
+
+// Returns true when the state changed. Desktops have no LCD device, so a failure is not retried for 30 s.
+static bool PollBrightness() {
+    if (!cfg.brightness) {
+        const bool c = sBright.has;
+        sBright.has = false;
+        return c;
+    }
+    const ULONGLONG now = GetTickCount64();
+    if (now < sBrightRetryAt) return false;
+    HANDLE h = OpenLcd(false);
+    DispBright db = {};
+    DWORD ret = 0;
+    bool ok = h != INVALID_HANDLE_VALUE &&
+              DeviceIoControl(h, 0x230498 /*IOCTL_VIDEO_QUERY_DISPLAY_BRIGHTNESS*/, nullptr, 0, &db, sizeof(db), &ret,
+                              nullptr) &&
+              ret >= sizeof(db);
+    if (h != INVALID_HANDLE_VALUE) CloseHandle(h);
+    if (!ok) {
+        sBrightRetryAt = now + 30000;
+        const bool c = sBright.has;
+        sBright.has = false;
+        return c;
+    }
+    SYSTEM_POWER_STATUS p = {};
+    GetSystemPowerStatus(&p);
+    const bool onAc = p.ACLineStatus == 1;
+    const bool hasAc = (db.policy & 1) != 0, hasDc = (db.policy & 2) != 0;
+    int level = onAc ? db.ac : db.dc;
+    if (onAc && !hasAc && hasDc) {
+        level = db.dc;
+    } else if (!onAc && !hasDc && hasAc) {
+        level = db.ac;
+    }
+    level = std::clamp(level, 0, 100);
+    const bool changed = !sBright.has || level != sBright.level;
+    sBright.has = true;
+    sBright.level = level;
+    return changed;
+}
+
+static bool SetBrightness(int level) {
+    level = std::clamp(level, 0, 100);
+    HANDLE h = OpenLcd(true);
+    if (h == INVALID_HANDLE_VALUE) {
+        Wh_Log(L"Brightness: cannot open the LCD device for writing (error %lu)", GetLastError());
+        return false;
+    }
+    DispBright db = {3 /*AC and DC*/, (UCHAR)level, (UCHAR)level};
+    DWORD ret = 0;
+    const bool ok = DeviceIoControl(h, 0x23049C /*IOCTL_VIDEO_SET_DISPLAY_BRIGHTNESS*/, &db, sizeof(db), nullptr, 0,
+                                    &ret, nullptr) != FALSE;
+    if (!ok) Wh_Log(L"Brightness: set failed (error %lu)", GetLastError());
+    CloseHandle(h);
+    if (ok) {
+        sBright.has = true;
+        sBright.level = level;
+    }
+    return ok;
+}
+
+// ===== Media: Windows.Media.Control (the API behind the system media flyout) =====
+static const UINT WM_MEDIA_UPDATED = WM_APP + 0x34;
+
+struct MediaSnap {
+    bool valid = false;  // there is a media session
+    bool playing = false;
+    std::wstring title, artist, album;
+    double position = 0.0, duration = 0.0;  // seconds
+    ULONGLONG at = 0;                       // GetTickCount64() when `position` was read
+    int thumbW = 0, thumbH = 0;
+    std::vector<uint32_t> thumbPx;          // premultiplied BGRA
+};
+static MediaSnap sMedia;
+static CRITICAL_SECTION sMediaCs;
+static bool sMediaCsInit = false;
+static HANDLE sMediaThread = nullptr;
+static HANDLE sMediaStop = nullptr;
+static HANDLE sMediaWake = nullptr;
+static volatile LONG sMediaActive = 0;
+static volatile LONG sMediaCmd = 0;  // 1 previous, 2 play / pause, 3 next
+
+// Decodes the cover (any format WIC knows) and scales it to fit 192 x 192.
+static bool DecodeThumb(const std::vector<uint8_t>& bytes, std::vector<uint32_t>& px, int& w, int& h) {
+    IWICImagingFactory* wic = nullptr;
+    if (FAILED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wic))) || !wic) {
+        return false;
+    }
+    IWICStream* st = nullptr;
+    IWICBitmapDecoder* dec = nullptr;
+    IWICBitmapFrameDecode* fr = nullptr;
+    IWICBitmapScaler* sc = nullptr;
+    IWICFormatConverter* cv = nullptr;
+    bool ok = false;
+    if (SUCCEEDED(wic->CreateStream(&st)) && st &&
+        SUCCEEDED(st->InitializeFromMemory((BYTE*)bytes.data(), (DWORD)bytes.size())) &&
+        SUCCEEDED(wic->CreateDecoderFromStream(st, nullptr, WICDecodeMetadataCacheOnDemand, &dec)) && dec &&
+        SUCCEEDED(dec->GetFrame(0, &fr)) && fr) {
+        UINT fw = 0, fh = 0;
+        fr->GetSize(&fw, &fh);
+        if (fw > 0 && fh > 0 && fw <= 8192 && fh <= 8192) {
+            const UINT kMax = 192;
+            UINT tw = kMax, th = kMax;
+            if (fw >= fh) {
+                th = std::max<UINT>(1, fh * kMax / fw);
+            } else {
+                tw = std::max<UINT>(1, fw * kMax / fh);
+            }
+            if (SUCCEEDED(wic->CreateBitmapScaler(&sc)) && sc &&
+                SUCCEEDED(sc->Initialize(fr, tw, th, WICBitmapInterpolationModeFant)) &&
+                SUCCEEDED(wic->CreateFormatConverter(&cv)) && cv &&
+                SUCCEEDED(cv->Initialize(sc, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0,
+                                         WICBitmapPaletteTypeCustom))) {
+                px.assign((size_t)tw * th, 0);
+                if (SUCCEEDED(cv->CopyPixels(nullptr, tw * 4, (UINT)(px.size() * 4), (BYTE*)px.data()))) {
+                    w = (int)tw;
+                    h = (int)th;
+                    ok = true;
+                }
+            }
+        }
+    }
+    SafeRelease(cv);
+    SafeRelease(sc);
+    SafeRelease(fr);
+    SafeRelease(dec);
+    SafeRelease(st);
+    SafeRelease(wic);
+    return ok;
+}
+
+static DWORD WINAPI MediaThreadProc(LPVOID) {
+    namespace wmc = winrt::Windows::Media::Control;
+    try {
+        winrt::init_apartment(winrt::apartment_type::multi_threaded);
+    } catch (...) {
+        return 0;
+    }
+    wmc::GlobalSystemMediaTransportControlsSessionManager mgr{nullptr};
+    std::wstring lastKey;
+    std::vector<uint32_t> lastPx;
+    int lastW = 0, lastH = 0;
+    bool quit = false;
+    while (!quit) {
+        if (!sMediaActive) {  // the tab is closed: sleep until it opens again
+            HANDLE hs[2] = {sMediaStop, sMediaWake};
+            if (WaitForMultipleObjects(2, hs, FALSE, INFINITE) == WAIT_OBJECT_0) break;
+            if (!sMediaActive) continue;
+        }
+
+        MediaSnap snap;
+        try {
+            if (!mgr) mgr = wmc::GlobalSystemMediaTransportControlsSessionManager::RequestAsync().get();
+            wmc::GlobalSystemMediaTransportControlsSession session{nullptr};
+            if (mgr) session = mgr.GetCurrentSession();
+
+            const LONG cmd = InterlockedExchange(&sMediaCmd, 0);
+            if (session && cmd) {
+                if (cmd == 1) {
+                    session.TrySkipPreviousAsync().get();
+                } else if (cmd == 2) {
+                    session.TryTogglePlayPauseAsync().get();
+                } else if (cmd == 3) {
+                    session.TrySkipNextAsync().get();
+                }
+            }
+
+            if (session) {
+                auto props = session.TryGetMediaPropertiesAsync().get();
+                snap.valid = true;
+                snap.title = props.Title().c_str();
+                snap.artist = props.Artist().c_str();
+                snap.album = props.AlbumTitle().c_str();
+                auto pb = session.GetPlaybackInfo();
+                snap.playing =
+                    pb.PlaybackStatus() == wmc::GlobalSystemMediaTransportControlsSessionPlaybackStatus::Playing;
+                auto tl = session.GetTimelineProperties();
+                snap.position = std::chrono::duration<double>(tl.Position()).count();
+                snap.duration = std::chrono::duration<double>(tl.EndTime() - tl.StartTime()).count();
+                if (snap.playing) {  // the reported position is a snapshot: add the time since it was taken
+                    const double since = std::chrono::duration<double>(winrt::clock::now() - tl.LastUpdatedTime()).count();
+                    if (since > 0.0 && since < 3600.0) snap.position += since;
+                }
+                snap.at = GetTickCount64();
+
+                // The cover is only fetched when the track changes.
+                const std::wstring key = snap.title + L"|" + snap.artist + L"|" + snap.album;
+                if (key != lastKey) {
+                    lastKey = key;
+                    lastPx.clear();
+                    lastW = lastH = 0;
+                    try {
+                        auto ref = props.Thumbnail();
+                        if (ref) {
+                            auto stream = ref.OpenReadAsync().get();
+                            const uint64_t size = stream.Size();
+                            if (size > 0 && size < 6ull * 1024ull * 1024ull) {
+                                winrt::Windows::Storage::Streams::DataReader reader(stream);
+                                reader.LoadAsync((uint32_t)size).get();
+                                std::vector<uint8_t> bytes((size_t)size);
+                                reader.ReadBytes(bytes);
+                                DecodeThumb(bytes, lastPx, lastW, lastH);
+                            }
+                        }
+                    } catch (...) {
+                    }
+                }
+                snap.thumbPx = lastPx;
+                snap.thumbW = lastW;
+                snap.thumbH = lastH;
+            }
+        } catch (...) {
+            mgr = nullptr;  // look the session manager up again next time
+            snap = MediaSnap();
+        }
+
+        EnterCriticalSection(&sMediaCs);
+        sMedia = snap;
+        LeaveCriticalSection(&sMediaCs);
+        if (sBar) PostMessageW(sBar, WM_MEDIA_UPDATED, 0, 0);
+
+        HANDLE hs[2] = {sMediaStop, sMediaWake};
+        if (WaitForMultipleObjects(2, hs, FALSE, 700) == WAIT_OBJECT_0) quit = true;
+    }
+    winrt::uninit_apartment();
+    return 0;
+}
+
+static void MediaWant(bool on) {
+    static bool last = false;
+    if (on == last) return;
+    last = on;
+    if (on) {
+        if (!sMediaCsInit) {
+            InitializeCriticalSection(&sMediaCs);
+            sMediaCsInit = true;
+        }
+        if (!sMediaThread) {
+            sMediaStop = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+            sMediaWake = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+            if (sMediaStop && sMediaWake) sMediaThread = CreateThread(nullptr, 0, MediaThreadProc, nullptr, 0, nullptr);
+        }
+        InterlockedExchange(&sMediaActive, 1);
+        if (sMediaWake) SetEvent(sMediaWake);
+    } else {
+        InterlockedExchange(&sMediaActive, 0);
+    }
+}
+
+static void MediaStop() {
+    InterlockedExchange(&sMediaActive, 0);
+    if (!sMediaThread) return;
+    SetEvent(sMediaStop);
+    WaitForSingleObject(sMediaThread, 3000);
+    CloseHandle(sMediaThread);
+    CloseHandle(sMediaStop);
+    CloseHandle(sMediaWake);
+    sMediaThread = nullptr;
+    sMediaStop = nullptr;
+    sMediaWake = nullptr;
+}
+
+static void MediaCommand(int c) {
+    InterlockedExchange(&sMediaCmd, c);
+    if (sMediaWake) SetEvent(sMediaWake);  // refresh right away
+}
+
+static void MediaGet(MediaSnap& out) {
+    if (!sMediaCsInit) return;
+    EnterCriticalSection(&sMediaCs);
+    out = sMedia;
+    LeaveCriticalSection(&sMediaCs);
+}
+
+// ===== Overlay (OSD): a small panel that grows out of an edge when volume / brightness changes =====
+static HDC soDC = nullptr;
+static HBITMAP soDib = nullptr;
+static HGDIOBJ soOld = nullptr;
+static int soW = 0, soH = 0;
+static ID2D1DCRenderTarget* soRt = nullptr;
+static ID2D1SolidColorBrush* soBr = nullptr;
+static IDWriteTextFormat* soFmt = nullptr;
+static double soFmtScale = 0;
+static int sOsdEdge = -1;       // 0 left, 1 right, 2 top, 3 bottom
+static int sOsdKind = 0;        // 0 volume, 1 brightness
+static float sOsdLevel = 0.f;   // 0..1
+static bool sOsdMuted = false;
+static ULONGLONG sOsdHideAt = 0;
+static ULONGLONG sVolChangeAt = 0;     // when the volume / mute last changed (tick count)
+static ULONGLONG sBrightChangeAt = 0;  // when the brightness last changed
+static HWINEVENTHOOK sOsdHook = nullptr;
+
+static bool OsdEnsureSurface(int w, int h) {
+    if (soDib && w == soW && h == soH) return true;
+    if (!soDC) soDC = CreateCompatibleDC(nullptr);
+    if (soDib) {
+        SelectObject(soDC, soOld);
+        DeleteObject(soDib);
+        soDib = nullptr;
+    }
+    BITMAPINFO bi = {};
+    bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bi.bmiHeader.biWidth = w;
+    bi.bmiHeader.biHeight = -h;
+    bi.bmiHeader.biPlanes = 1;
+    bi.bmiHeader.biBitCount = 32;
+    bi.bmiHeader.biCompression = BI_RGB;
+    void* bits = nullptr;
+    soDib = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+    if (!soDib) return false;
+    soOld = SelectObject(soDC, soDib);
+    soW = w;
+    soH = h;
+    return true;
+}
+
+static bool OsdEnsureRt() {
+    if (soRt && soBr) return true;
+    SafeRelease(soBr);
+    SafeRelease(soRt);
+    if (!g_d2d) return false;
+    D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
+        D2D1_RENDER_TARGET_TYPE_DEFAULT,
+        D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED), 96.f, 96.f,
+        D2D1_RENDER_TARGET_USAGE_NONE, D2D1_FEATURE_LEVEL_DEFAULT);
+    if (FAILED(g_d2d->CreateDCRenderTarget(&props, &soRt)) || !soRt) return false;
+    soRt->SetDpi(96.f, 96.f);
+    soRt->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 1), &soBr);
+    return soBr != nullptr;
+}
+
+// Docked to the chosen edge of the inner area (next to the bar / frame).
+static void PositionOsd() {
+    if (!sOsd) {
+        sOsd = MakeOverlayWindow(L"Fluid Shell OSD");
+        if (!sOsd) return;
+    }
+    const double dpi = MonitorScale(MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY));
+    const int fl = (int)std::lround(cfg.frameRadius * dpi);
+    const bool vertical = sOsdEdge <= 1;
+    const int thick = (int)std::lround(58 * dpi);
+    const int len = (int)std::lround((vertical ? 210 : 260) * dpi);
+    const RECT inner = sInnerValid ? sInner : RECT{0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
+    int sw, sh, x, y;
+    if (vertical) {
+        sw = thick;
+        sh = len + 2 * fl;
+        y = (int)((inner.top + inner.bottom) / 2) - sh / 2;
+        x = sOsdEdge == 0 ? (int)inner.left : (int)inner.right - sw;
+    } else {
+        sw = len + 2 * fl;
+        sh = thick;
+        x = (int)((inner.left + inner.right) / 2) - sw / 2;
+        y = sOsdEdge == 2 ? (int)inner.top : (int)inner.bottom - sh;
+    }
+    if (!OsdEnsureSurface(sw, sh)) return;
+    SetWindowPos(sOsd, HWND_TOPMOST, x, y, sw, sh, SWP_NOACTIVATE | SWP_SHOWWINDOW);
+}
+
+static void RenderOsd() {
+    if (!sOsd || soW <= 0 || soH <= 0 || !g_dw || !g_d2d || !OsdEnsureRt()) return;
+    const double dpi = MonitorScale(MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY));
+    const float s = (float)dpi;
+    if (!soFmt || std::fabs(soFmtScale - dpi) > 0.001) {
+        SafeRelease(soFmt);
+        soFmt = MakeFormat(PickFontFamily(), 13.f * s, DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_TEXT_ALIGNMENT_CENTER);
+        soFmtScale = dpi;
+    }
+    const int fl = (int)std::lround(cfg.frameRadius * dpi);
+    const bool vertical = sOsdEdge <= 1;
+    const float W = (float)soW, H = (float)soH;
+    const float x = vertical ? 0.f : (float)fl, y = vertical ? (float)fl : 0.f;
+    const float w = vertical ? W : W - 2.f * fl, h = vertical ? H - 2.f * fl : H;
+    const float R = std::max(0.f, std::min((float)fl, std::min(w, h) / 2));
+    float rTL = R, rTR = R, rBR = R, rBL = R;
+    switch (sOsdEdge) {
+        case 0: rTL = rBL = 0.f; break;
+        case 1: rTR = rBR = 0.f; break;
+        case 2: rTL = rTR = 0.f; break;
+        default: rBL = rBR = 0.f; break;
+    }
+
+    // Same animation as the launcher / dashboard.
+    const bool slide = g_cfg.anim == AnimStyle::SlideBottom || g_cfg.anim == AnimStyle::SlideTop ||
+                       g_cfg.anim == AnimStyle::SlideLeft || g_cfg.anim == AnimStyle::SlideRight;
+    const bool fade = g_cfg.animFade || g_cfg.anim == AnimStyle::Fade || g_cfg.anim == AnimStyle::Popup;
+    const double alpha = fade ? std::clamp(1.0 - sOsdK, 0.0, 1.0) : 1.0;
+
+    RECT rc = {0, 0, soW, soH};
+    if (FAILED(soRt->BindDC(soDC, &rc))) return;
+    soRt->BeginDraw();
+    soRt->SetTransform(D2D1::Matrix3x2F::Identity());
+    soRt->Clear(D2D1::ColorF(0, 0, 0, 0));
+    soRt->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+    soRt->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+    const float k = (float)std::clamp(sOsdK, 0.0, 1.0);
+    if (slide) {  // slides in from the docked edge; the window edge clips it
+        const float dx = sOsdEdge == 0 ? -W * k : (sOsdEdge == 1 ? W * k : 0.f);
+        const float dy = sOsdEdge == 2 ? -H * k : (sOsdEdge == 3 ? H * k : 0.f);
+        soRt->SetTransform(D2D1::Matrix3x2F::Translation(dx, dy));
+    } else if (g_cfg.anim == AnimStyle::Popup) {
+        const float sc = (float)(1.0 + (0.9 - 1.0) * sOsdK);
+        const D2D1_POINT_2F c = sOsdEdge == 0 ? D2D1::Point2F(0.f, H / 2)
+                                : sOsdEdge == 1 ? D2D1::Point2F(W, H / 2)
+                                : sOsdEdge == 2 ? D2D1::Point2F(W / 2, 0.f)
+                                                : D2D1::Point2F(W / 2, H);
+        soRt->SetTransform(D2D1::Matrix3x2F::Scale(sc, sc, c));
+    }
+
+    ID2D1PathGeometry* shape = MakeShapeGeo(x, y, w, h, rTL, rTR, rBR, rBL);
+    if (shape && R >= 1.f) {
+        const D2D1_SWEEP_DIRECTION cw = D2D1_SWEEP_DIRECTION_CLOCKWISE;
+        const D2D1_SWEEP_DIRECTION ccw = D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
+        switch (sOsdEdge) {
+            case 0:
+                shape = AddFlare(shape, x, y - R, x, y, x + R, y, cw, R);
+                shape = AddFlare(shape, x, y + h + R, x, y + h, x + R, y + h, ccw, R);
+                break;
+            case 1:
+                shape = AddFlare(shape, x + w, y - R, x + w, y, x + w - R, y, ccw, R);
+                shape = AddFlare(shape, x + w, y + h + R, x + w, y + h, x + w - R, y + h, cw, R);
+                break;
+            case 2:
+                shape = AddFlare(shape, x - R, y, x, y, x, y + R, ccw, R);
+                shape = AddFlare(shape, x + w + R, y, x + w, y, x + w, y + R, cw, R);
+                break;
+            default:
+                shape = AddFlare(shape, x - R, y + h, x, y + h, x, y + h - R, cw, R);
+                shape = AddFlare(shape, x + w + R, y + h, x + w, y + h, x + w, y + h - R, ccw, R);
+                break;
+        }
+    }
+    if (shape) {
+        D2D1_COLOR_F bg = g_pal.bg;
+        bg.a = 1.f;  // same opaque colour as the frame
+        soBr->SetColor(&bg);
+        soRt->FillGeometry(shape, soBr);
+        shape->Release();
+    }
+
+    auto brush = [&](const D2D1_COLOR_F& col, float a) {
+        D2D1_COLOR_F c = col;
+        c.a *= a;
+        soBr->SetColor(&c);
+    };
+    auto ln = [&](float x0, float y0, float x1, float y1, const D2D1_COLOR_F& col, float a, float lw) {
+        brush(col, a);
+        soRt->DrawLine(D2D1::Point2F(x0, y0), D2D1::Point2F(x1, y1), soBr, lw, g_roundStroke);
+    };
+    auto fillRR = [&](float l, float t, float r, float b, float rad, const D2D1_COLOR_F& col, float a) {
+        brush(col, a);
+        D2D1_ROUNDED_RECT q = D2D1::RoundedRect(D2D1::RectF(l, t, r, b), rad, rad);
+        soRt->FillRoundedRectangle(&q, soBr);
+    };
+
+    // icon + track + percent
+    const bool muted = sOsdKind == 0 && sOsdMuted;
+    const float level = muted ? 0.f : std::clamp(sOsdLevel, 0.f, 1.f);
+    float icx, icy, tL, tT, tR, tB;
+    D2D1_RECT_F pr;
+    const float trackW = 8.f * s;
+    if (vertical) {
+        icx = x + w / 2;
+        icy = y + 28.f * s;
+        tL = icx - trackW / 2;
+        tR = icx + trackW / 2;
+        tT = y + 54.f * s;
+        tB = y + h - 40.f * s;
+        pr = D2D1::RectF(x, y + h - 34.f * s, x + w, y + h - 8.f * s);
+    } else {
+        icx = x + 28.f * s;
+        icy = y + h / 2;
+        tL = x + 54.f * s;
+        tR = x + w - 58.f * s;
+        tT = icy - trackW / 2;
+        tB = icy + trackW / 2;
+        pr = D2D1::RectF(x + w - 54.f * s, y, x + w - 8.f * s, y + h);
+    }
+    fillRR(tL, tT, tR, tB, trackW / 2, g_pal.textDim, 0.3f);
+    if (vertical) {
+        const float fy = tB - (tB - tT) * level;
+        if (tB - fy > 0.5f) fillRR(tL, fy, tR, tB, trackW / 2, muted ? g_pal.textDim : g_pal.accent, 1.f);
+    } else {
+        const float fx = tL + (tR - tL) * level;
+        if (fx - tL > 0.5f) fillRR(tL, tT, fx, tB, trackW / 2, muted ? g_pal.textDim : g_pal.accent, 1.f);
+    }
+    const float u = 8.f * s, lw = 1.7f * s;
+    if (sOsdKind == 0) {  // speaker
+        const float xa = icx - u * 0.95f, xb = icx - u * 0.45f, xc = icx + u * 0.05f;
+        ln(xa, icy - u * 0.35f, xb, icy - u * 0.35f, g_pal.text, 0.95f, lw);
+        ln(xb, icy - u * 0.35f, xc, icy - u * 0.8f, g_pal.text, 0.95f, lw);
+        ln(xc, icy - u * 0.8f, xc, icy + u * 0.8f, g_pal.text, 0.95f, lw);
+        ln(xc, icy + u * 0.8f, xb, icy + u * 0.35f, g_pal.text, 0.95f, lw);
+        ln(xb, icy + u * 0.35f, xa, icy + u * 0.35f, g_pal.text, 0.95f, lw);
+        ln(xa, icy + u * 0.35f, xa, icy - u * 0.35f, g_pal.text, 0.95f, lw);
+        if (muted || level <= 0.001f) {
+            ln(xc + u * 0.4f, icy - u * 0.4f, xc + u * 1.0f, icy + u * 0.4f, g_pal.text, 0.95f, lw);
+            ln(xc + u * 0.4f, icy + u * 0.4f, xc + u * 1.0f, icy - u * 0.4f, g_pal.text, 0.95f, lw);
+        } else {
+            ln(xc + u * 0.5f, icy - u * 0.35f, xc + u * 0.8f, icy - u * 0.6f, g_pal.text, 0.95f, lw);
+            ln(xc + u * 0.5f, icy + u * 0.35f, xc + u * 0.8f, icy + u * 0.6f, g_pal.text, 0.95f, lw);
+        }
+    } else {  // sun
+        brush(g_pal.text, 0.95f);
+        D2D1_ELLIPSE e = D2D1::Ellipse(D2D1::Point2F(icx, icy), u * 0.5f, u * 0.5f);
+        soRt->FillEllipse(&e, soBr);
+        for (int i = 0; i < 8; ++i) {
+            const double a = i * kPi / 4.0;
+            ln(icx + (float)std::cos(a) * u * 0.85f, icy + (float)std::sin(a) * u * 0.85f,
+               icx + (float)std::cos(a) * u * 1.2f, icy + (float)std::sin(a) * u * 1.2f, g_pal.text, 0.95f, lw);
+        }
+    }
+    wchar_t pct[16] = {};
+    swprintf_s(pct, L"%d%%", (int)std::lround(muted ? 0.f : sOsdLevel * 100.f));
+    brush(muted ? g_pal.textDim : g_pal.text, 1.f);
+    soRt->DrawText(pct, (UINT32)wcslen(pct), soFmt, &pr, soBr);
+
+    const HRESULT hr = soRt->EndDraw();
+    if (hr == D2DERR_RECREATE_TARGET) {
+        SafeRelease(soBr);
+        SafeRelease(soRt);
+    }
+    SIZE sz = {soW, soH};
+    POINT src = {0, 0};
+    BLENDFUNCTION bf = {};
+    bf.BlendOp = AC_SRC_OVER;
+    bf.SourceConstantAlpha = (BYTE)std::clamp((int)std::lround(alpha * 255.0), 0, 255);
+    bf.AlphaFormat = AC_SRC_ALPHA;
+    UpdateLayeredWindow(sOsd, nullptr, nullptr, &sz, soDC, &src, 0, &bf, ULW_ALPHA);
+}
+
+static void OsdTick() {
+    static double last = 0.0;
+    const double now = NowSec();
+    const double dt = last > 0.0 ? std::min(0.05, now - last) : 0.016;
+    last = now;
+    if (sOsdWanted && GetTickCount64() >= sOsdHideAt) sOsdWanted = false;
+    bool moving;
+    if (sOsdWanted) {
+        const double zeta = (g_cfg.anim == AnimStyle::Popup) ? g_cfg.bounceZeta : 1.0;
+        moving = SpringTo(sOsdK, sOsdV, 0.0, zeta, AnimShowSec(), dt, 0.0015, 0.02);
+        if (g_cfg.anim != AnimStyle::Popup && sOsdK < 0.0) {
+            sOsdK = 0.0;
+            sOsdV = 0.0;
+        }
+    } else {
+        SpringTo(sOsdK, sOsdV, 1.0, 1.0, AnimHideSec(), dt, 0.0015, 0.02);
+        moving = sOsdK < 0.985;
+    }
+    RenderOsd();
+    if (!moving && !sOsdWanted) {
+        KillTimer(sBar, T_OSD);
+        last = 0.0;
+        sOsdK = 1.0;
+        sOsdV = 0.0;
+        if (sOsd) ShowWindow(sOsd, SW_HIDE);
+    }
+}
+
+static void OsdShow(int kind, float level, bool muted) {
+    const int edge = kind == 0 ? cfg.osdVol : cfg.osdBright;
+    if (edge < 0 || edge > 3) return;  // off
+    if (!sBar || sSuppressed || sDashWanted || g_vis != Vis::Hidden) return;
+    sOsdKind = kind;
+    sOsdLevel = level;
+    sOsdMuted = muted;
+    if (edge != sOsdEdge || !sOsd) {
+        sOsdEdge = edge;
+        sOsdK = 1.0;  // another edge: start the animation again from "hidden"
+        sOsdV = 0.0;
+        PositionOsd();
+    }
+    if (!sOsd) return;
+    sOsdHideAt = GetTickCount64() + (ULONGLONG)cfg.osdMs;
+    sOsdWanted = true;
+    if (!IsWindowVisible(sOsd)) ShowWindow(sOsd, SW_SHOWNOACTIVATE);
+    SetTimer(sBar, T_OSD, 15, nullptr);
+    RenderOsd();
+}
+
+// Every 100 ms: compare volume / brightness with the last values and show the overlay on a change.
+static void OsdPoll() {
+    if (!sBar) return;
+    static bool haveBase = false;
+    static float lastVol = 0.f;
+    static bool lastMute = false;
+    static int lastBright = -1;
+    static ULONGLONG nextVolTry = 0, lastBrightPoll = 0;
+    const ULONGLONG now = GetTickCount64();
+
+    if (sSt.hasVolume || now >= nextVolTry) {
+        const bool hadVol = sSt.hasVolume;
+        PollVolume();
+        if (!sSt.hasVolume) nextVolTry = now + 2000;  // no audio device: do not hammer COM
+        if (sSt.hasVolume) {
+            if (haveBase && hadVol && (std::fabs(sSt.volume - lastVol) > 0.004f || sSt.muted != lastMute)) {
+                sVolChangeAt = now;
+                OsdShow(0, sSt.volume, sSt.muted);
+            }
+            lastVol = sSt.volume;
+            lastMute = sSt.muted;
+        }
+    }
+    if (cfg.brightness && now - lastBrightPoll > 300) {
+        lastBrightPoll = now;
+        PollBrightness();
+        if (sBright.has) {
+            if (haveBase && lastBright >= 0 && sBright.level != lastBright) {
+                sBrightChangeAt = now;
+                OsdShow(1, sBright.level / 100.f, false);
+            }
+            lastBright = sBright.level;
+        }
+    }
+    haveBase = true;
+}
+
+// Called by Windows for every window that becomes visible (out-of-context hook, delivered on our UI thread).
+static void CALLBACK SysOsdEventProc(HWINEVENTHOOK, DWORD, HWND h, LONG idObject, LONG, DWORD, DWORD) {
+    if (!cfg.hideSysOsd || idObject != OBJID_WINDOW || !h) return;
+    wchar_t cls[64] = {};
+    GetClassNameW(h, cls, ARRAYSIZE(cls));
+    if (lstrcmpW(cls, L"XamlExplorerHostIslandWindow") != 0) return;
+    if (!IsWindowVisible(h)) return;
+    wchar_t title[8] = {};
+    if (GetWindowTextW(h, title, ARRAYSIZE(title)) > 0) return;  // the OSD host window has no title
+    const LONG_PTR ex = GetWindowLongPtrW(h, GWL_EXSTYLE);
+    if (!(ex & WS_EX_NOACTIVATE)) return;
+    RECT r = {};
+    if (!GetWindowRect(h, &r)) return;
+    const double dpi = MonitorScale(MonitorFromWindow(h, MONITOR_DEFAULTTOPRIMARY));
+    if (r.right - r.left > 700 * dpi || r.bottom - r.top > 250 * dpi) return;  // switchers / Task View are bigger
+    DWORD pid = 0;
+    GetWindowThreadProcessId(h, &pid);
+    const std::wstring path = LowerAscii(ProcessImagePath(pid));
+    if (path.size() < 12 || path.compare(path.size() - 12, 12, L"explorer.exe") != 0) return;
+
+    // Only when volume / brightness really changed a moment ago (they change BEFORE the shell shows its popup).
+    const ULONGLONG now = GetTickCount64();
+    bool changed = now - sVolChangeAt < 800 || now - sBrightChangeAt < 800;
+    if (!changed && sSt.hasVolume) {
+        const float pv = sSt.volume;
+        const bool pm = sSt.muted;
+        PollVolume();
+        if (std::fabs(sSt.volume - pv) > 0.004f || sSt.muted != pm) {
+            sVolChangeAt = now;
+            changed = true;
+        }
+    }
+    if (!changed && cfg.brightness && sBright.has) {
+        const int pb = sBright.level;
+        sBrightRetryAt = 0;
+        PollBrightness();
+        if (sBright.has && sBright.level != pb) {
+            sBrightChangeAt = now;
+            changed = true;
+        }
+    }
+    if (!changed) return;
+    ShowWindow(h, SW_HIDE);
+}
+
+static void SysOsdHook(bool on) {
+    if (on && !sOsdHook) {
+        sOsdHook = SetWinEventHook(EVENT_OBJECT_SHOW, EVENT_OBJECT_SHOW, nullptr, SysOsdEventProc, 0, 0,
+                                   WINEVENT_OUTOFCONTEXT);
+    } else if (!on && sOsdHook) {
+        UnhookWinEvent(sOsdHook);
+        sOsdHook = nullptr;
+    }
+}
+
+static void OsdApply() {
+    if (!sBar) return;
+    KillTimer(sBar, T_OSDPOLL);
+    SysOsdHook(cfg.hideSysOsd);
+    if (cfg.osdVol > 3 && cfg.osdBright > 3 && !cfg.hideSysOsd) {  // both off (the poll is still needed to hide the native popup)
+        sOsdWanted = false;
+        sOsdK = 1.0;
+        if (sOsd) ShowWindow(sOsd, SW_HIDE);
+        return;
+    }
+    SetTimer(sBar, T_OSDPOLL, 100, nullptr);
+}
+
+static void OsdShutdown() {
+    SysOsdHook(false);
+    if (sBar) {
+        KillTimer(sBar, T_OSD);
+        KillTimer(sBar, T_OSDPOLL);
+    }
+    if (sOsd) {
+        DestroyWindow(sOsd);
+        sOsd = nullptr;
+    }
+    SafeRelease(soFmt);
+    SafeRelease(soBr);
+    SafeRelease(soRt);
+    if (soDib) {
+        SelectObject(soDC, soOld);
+        DeleteObject(soDib);
+        soDib = nullptr;
+    }
+    if (soDC) {
+        DeleteDC(soDC);
+        soDC = nullptr;
+    }
+}
+
 // ===== Dashboard: a panel that grows out of the top of the frame =====
 static HDC sdDC = nullptr;
 static HBITMAP sdDib = nullptr;
@@ -9622,6 +10748,10 @@ static ID2D1SolidColorBrush* sdBr = nullptr;
 static IDWriteTextFormat* sdFmtTab = nullptr;
 static IDWriteTextFormat* sdFmtBig = nullptr;
 static IDWriteTextFormat* sdFmtSmall = nullptr;
+static IDWriteTextFormat* sdFmtMid = nullptr;     // temperature
+static IDWriteTextFormat* sdFmtSmallL = nullptr;  // left aligned small text
+static IDWriteTextFormat* sdFmtRing = nullptr;    // value inside a gauge
+static IDWriteTextFormat* sdFmtTiny = nullptr;    // small centered text
 static double sdFmtScale = 0;
 static bool sDashViaEdge = false;   // opened by the cursor: closes when the cursor leaves
 static bool sdTracking = false;
@@ -9636,11 +10766,14 @@ static std::vector<DashCtl> sDashCtl;
 static int sDashCtlHover = -1;
 static RECT sSliderRect = {};   // extent of the volume track (window coordinates)
 static bool sVolDrag = false;
+static RECT sBrightRect = {};   // extent of the brightness track
+static bool sBrightDrag = false;
 static int sCalOffset = 0;      // months away from the current month
 static ULONGLONG sEdgeSince = 0;    // when the cursor entered the hot zone
 static bool sEdgeArmed = true;      // after a close the cursor must leave the hot zone before it can reopen
 static ULONGLONG sOutsideSince = 0;
 static int sdLastMinute = -1;
+static bool sMarqActive = false;   // some text in the dashboard is scrolling
 static const wchar_t* const kDashTabs[3] = {L"Dashboard", L"Media", L"Performance"};
 
 static bool DashEnsureSurface(int w, int h) {
@@ -9682,7 +10815,19 @@ static bool DashEnsureRt() {
     return sdBr != nullptr;
 }
 
+// Scroll position (px) of a looping marquee: rests for a moment, then scrolls one full cycle.
+static float MarqueeOffset(float cycle, float s) {
+    const double speed = 42.0 * s;  // pixels per second
+    const double pause = 1.6;       // seconds at rest at the start of every loop
+    const double run = cycle / speed;
+    const double t = std::fmod(NowSec(), run + pause);
+    return t < pause ? 0.f : (float)((t - pause) * speed);
+}
+
 static void RenderDash() {
+    sMarqActive = false;
+    PerfWant(sDashTab == 2 && sDashWanted && sDash != nullptr);  // sample only while the tab is visible
+    MediaWant(sDashTab == 1 && sDashWanted && sDash != nullptr);
     if (!sDash || sdW <= 0 || sdH <= 0 || !g_dw || !g_d2d || !DashEnsureRt()) return;
     const double dpi = MonitorScale(MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY));
     const float s = (float)dpi;
@@ -9690,6 +10835,14 @@ static void RenderDash() {
         SafeRelease(sdFmtTab);
         SafeRelease(sdFmtBig);
         SafeRelease(sdFmtSmall);
+        SafeRelease(sdFmtMid);
+        SafeRelease(sdFmtSmallL);
+        SafeRelease(sdFmtRing);
+        SafeRelease(sdFmtTiny);
+        sdFmtMid = MakeFormat(PickFontFamily(), 26.f * s, DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_TEXT_ALIGNMENT_LEADING);
+        sdFmtSmallL = MakeFormat(PickFontFamily(), 14.f * s, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_TEXT_ALIGNMENT_LEADING);
+        sdFmtRing = MakeFormat(PickFontFamily(), 22.f * s, DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_TEXT_ALIGNMENT_CENTER);
+        sdFmtTiny = MakeFormat(PickFontFamily(), 12.f * s, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_TEXT_ALIGNMENT_CENTER);
         sdFmtTab = MakeFormat(PickFontFamily(), 13.f * s, DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_TEXT_ALIGNMENT_CENTER);
         sdFmtBig = MakeFormat(PickFontFamily(), 52.f * s, DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_TEXT_ALIGNMENT_CENTER);
         sdFmtSmall = MakeFormat(PickFontFamily(), 15.f * s, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -9772,6 +10925,7 @@ static void RenderDash() {
         const float areaTop = tabH + 8.f * s;
         sDashCtl.clear();
         sSliderRect = RECT{0, 0, 0, 0};
+        sBrightRect = RECT{0, 0, 0, 0};
         auto fillRR = [&](float l, float t, float r, float b, float rad, const D2D1_COLOR_F& col, float a) {
             brush(col, a);
             D2D1_ROUNDED_RECT q = D2D1::RoundedRect(D2D1::RectF(l, t, r, b), rad, rad);
@@ -9791,22 +10945,53 @@ static void RenderDash() {
             return (int)sDashCtl.size() - 1;
         };
 
+        const float top = areaTop + 4.f * s;
+        const float bottom = curH - 14.f * s;
+        const float x0 = (float)fl + 16.f * s;
+        const float x1 = (float)fl + pw - 16.f * s;
+        const float totalW = x1 - x0;
+        const float gapC = 8.f * s;
+        const D2D1_COLOR_F cardCol = Mix(g_pal.bg, g_pal.text, 0.075f);  // the "card" surface
+        auto card = [&](float l, float t, float r, float b) { fillRR(l, t, r, b, 14.f * s, cardCol, 1.f); };
+        // Text that does not fit its box scrolls (marquee) instead of running into its neighbours.
+        auto drawScroll = [&](const std::wstring& text, IDWriteTextFormat* fmt, float lx, float ty, float rx, float by) {
+            const float availW = rx - lx;
+            const float tw = TextWidth(text.c_str(), fmt);
+            D2D1_RECT_F clipR = D2D1::RectF(lx, ty, rx, by);
+            if (tw <= availW + 1.f) {
+                sdRt->DrawText(text.c_str(), (UINT32)text.size(), fmt, &clipR, sdBr);
+                return;
+            }
+            sMarqActive = true;
+            const float cycle = tw + 28.f * s;
+            const float off = MarqueeOffset(cycle, s);
+            sdRt->PushAxisAlignedClip(&clipR, D2D1_ANTIALIAS_MODE_ALIASED);
+            for (int k = 0; k < 2; ++k) {
+                D2D1_RECT_F r = D2D1::RectF(lx - off + k * cycle, ty, lx - off + k * cycle + tw + 6.f, by);
+                sdRt->DrawText(text.c_str(), (UINT32)text.size(), fmt, &r, sdBr);
+            }
+            sdRt->PopAxisAlignedClip();
+        };
+
         if (sDashTab == 0) {
             SYSTEMTIME now;
             GetLocalTime(&now);
             sdLastMinute = now.wMinute;
-            const float top = areaTop + 4.f * s;
-            const float bottom = curH - 14.f * s;
-            const float x0 = (float)fl + 16.f * s;
-            const float x1 = (float)fl + pw - 16.f * s;
-            const float totalW = x1 - x0;
-            const float leftW = totalW * 0.32f;
-            const float volW = totalW * 0.16f;
-            const float calX0 = x0 + leftW + 8.f * s;
-            const float calX1 = x1 - volW - 8.f * s;
+            const float leftW = totalW * 0.38f;
+            const float calX0 = x0 + leftW + gapC, calX1 = x1;
 
-            // ---- clock + date
+            // Heights of the left cards; the clock card takes what is left so the column fills top..bottom.
+            const bool hasBright = sBright.has;
+            const float slidersH = (hasBright ? 98.f : 58.f) * s;
+            const float weatherH = cfg.weather ? 80.f * s : 0.f;
+            const float clockH = (bottom - top) - slidersH - weatherH - (cfg.weather ? 2.f : 1.f) * gapC;
+            const float clockTop = top, clockBottom = top + clockH;
+            const float weatherTop = clockBottom + gapC, weatherBottom = weatherTop + weatherH;
+            const float slidersTop = (cfg.weather ? weatherBottom : clockBottom) + gapC;
+
+            // ---- clock card
             {
+                card(x0, clockTop, x0 + leftW, clockBottom);
                 int hour = now.wHour;
                 if (!cfg.clock24) {
                     hour %= 12;
@@ -9817,19 +11002,170 @@ static void RenderDash() {
                 wchar_t dayName[64] = {}, dateLine[64] = {};
                 GetDateFormatW(LOCALE_USER_DEFAULT, 0, &now, L"dddd", dayName, ARRAYSIZE(dayName));
                 GetDateFormatW(LOCALE_USER_DEFAULT, 0, &now, L"d MMMM yyyy", dateLine, ARRAYSIZE(dateLine));
+                const float y = clockTop + (clockH - 108.f * s) / 2;
                 brush(g_pal.text, 1.f);
-                D2D1_RECT_F r1 = D2D1::RectF(x0, top + 30.f * s, x0 + leftW, top + 100.f * s);
+                D2D1_RECT_F r1 = D2D1::RectF(x0, y, x0 + leftW, y + 62.f * s);
                 sdRt->DrawText(hm, (UINT32)wcslen(hm), sdFmtBig, &r1, sdBr);
                 brush(g_pal.text, 0.9f);
-                D2D1_RECT_F r2 = D2D1::RectF(x0, top + 104.f * s, x0 + leftW, top + 128.f * s);
+                D2D1_RECT_F r2 = D2D1::RectF(x0, y + 62.f * s, x0 + leftW, y + 84.f * s);
                 sdRt->DrawText(dayName, (UINT32)wcslen(dayName), sdFmtTab, &r2, sdBr);
                 brush(g_pal.textDim, 1.f);
-                D2D1_RECT_F r3 = D2D1::RectF(x0, top + 128.f * s, x0 + leftW, top + 152.f * s);
+                D2D1_RECT_F r3 = D2D1::RectF(x0, y + 84.f * s, x0 + leftW, y + 106.f * s);
                 sdRt->DrawText(dateLine, (UINT32)wcslen(dateLine), sdFmtSmall, &r3, sdBr);
             }
 
-            // ---- calendar
+            // ---- weather card
+            if (cfg.weather) {
+                card(x0, weatherTop, x0 + leftW, weatherBottom);
+                WxSnap wx;
+                WeatherGet(wx);
+                if (wx.valid) {
+                    const D2D1_COLOR_F sunCol = D2D1::ColorF(1.f, 0.78f, 0.22f, 1.f);
+                    const D2D1_COLOR_F rainCol = D2D1::ColorF(0.45f, 0.7f, 1.f, 1.f);
+                    const float icx = x0 + 38.f * s, icy = weatherTop + weatherH / 2, isz = 44.f * s;
+                    auto cloudShape = [&](float ccx, float ccy, float w, const D2D1_COLOR_F& col) {
+                        dotC(ccx - 0.22f * w, ccy + 0.02f * w, 0.19f * w, col, 1.f);
+                        dotC(ccx + 0.02f * w, ccy - 0.08f * w, 0.25f * w, col, 1.f);
+                        dotC(ccx + 0.27f * w, ccy + 0.04f * w, 0.17f * w, col, 1.f);
+                        fillRR(ccx - 0.40f * w, ccy + 0.02f * w, ccx + 0.44f * w, ccy + 0.21f * w, 0.09f * w, col, 1.f);
+                    };
+                    auto sunShape = [&](float sx, float sy, float r) {
+                        dotC(sx, sy, r, sunCol, 1.f);
+                        for (int k = 0; k < 8; ++k) {
+                            const double a = k * kPi / 4.0;
+                            ln(sx + (float)std::cos(a) * r * 1.45f, sy + (float)std::sin(a) * r * 1.45f,
+                               sx + (float)std::cos(a) * r * 1.9f, sy + (float)std::sin(a) * r * 1.9f, sunCol, 1.f, 1.6f * s);
+                        }
+                    };
+                    switch (WxKind(wx.cond)) {
+                        case 1:
+                            sunShape(icx, icy, isz * 0.2f);
+                            break;
+                        case 2:
+                            sunShape(icx - 0.14f * isz, icy - 0.14f * isz, isz * 0.14f);
+                            cloudShape(icx + 0.06f * isz, icy + 0.1f * isz, isz * 0.8f, g_pal.text);
+                            break;
+                        case 4:
+                            cloudShape(icx, icy - 0.12f * isz, isz * 0.85f, g_pal.text);
+                            for (int k = 0; k < 3; ++k) {
+                                const float rx = icx - 0.22f * isz + k * 0.22f * isz;
+                                ln(rx, icy + 0.18f * isz, rx - 0.07f * isz, icy + 0.38f * isz, rainCol, 1.f, 1.8f * s);
+                            }
+                            break;
+                        case 5:
+                            cloudShape(icx, icy - 0.12f * isz, isz * 0.85f, g_pal.text);
+                            for (int k = 0; k < 3; ++k) {
+                                dotC(icx - 0.22f * isz + k * 0.22f * isz, icy + 0.3f * isz, 1.8f * s, rainCol, 1.f);
+                            }
+                            break;
+                        case 6:
+                            cloudShape(icx, icy - 0.12f * isz, isz * 0.85f, g_pal.text);
+                            ln(icx + 0.06f * isz, icy + 0.14f * isz, icx - 0.08f * isz, icy + 0.28f * isz, sunCol, 1.f, 2.f * s);
+                            ln(icx - 0.08f * isz, icy + 0.28f * isz, icx + 0.06f * isz, icy + 0.28f * isz, sunCol, 1.f, 2.f * s);
+                            ln(icx + 0.06f * isz, icy + 0.28f * isz, icx - 0.06f * isz, icy + 0.44f * isz, sunCol, 1.f, 2.f * s);
+                            break;
+                        case 7:
+                            for (int k = 0; k < 3; ++k) {
+                                ln(icx - 0.38f * isz, icy - 0.16f * isz + k * 0.2f * isz, icx + 0.38f * isz,
+                                   icy - 0.16f * isz + k * 0.2f * isz, g_pal.textDim, 1.f, 2.f * s);
+                            }
+                            break;
+                        default:  // 3 = cloud, 0 = unknown
+                            cloudShape(icx, icy, isz * 0.9f, g_pal.text);
+                            break;
+                    }
+                    const float tx = x0 + 70.f * s, trx = x0 + leftW - 12.f * s, wy = weatherTop + 6.f * s;
+                    brush(g_pal.text, 1.f);
+                    D2D1_RECT_F tr = D2D1::RectF(tx, wy, trx, wy + 32.f * s);
+                    sdRt->DrawText(wx.temp.c_str(), (UINT32)wx.temp.size(), sdFmtMid, &tr, sdBr);
+                    brush(g_pal.textDim, 1.f);
+                    drawScroll(wx.cond, sdFmtSmallL, tx, wy + 32.f * s, trx, wy + 50.f * s);
+                    const std::wstring extra = L"Feels " + wx.feels + L"  -  " + wx.humidity;
+                    brush(g_pal.textDim, 0.8f);
+                    drawScroll(extra, sdFmtSmallL, tx, wy + 50.f * s, trx, wy + 68.f * s);
+                } else {
+                    brush(g_pal.textDim, 0.9f);
+                    const wchar_t* msg = wx.failed ? L"Weather unavailable" : L"Loading weather...";
+                    D2D1_RECT_F er = D2D1::RectF(x0, weatherTop, x0 + leftW, weatherBottom);
+                    sdRt->DrawText(msg, (UINT32)wcslen(msg), sdFmtSmall, &er, sdBr);
+                }
+            }
+
+            // ---- sliders card: brightness above volume
             {
+                card(x0, slidersTop, x0 + leftW, bottom);
+                const float lx0 = x0 + 12.f * s, lx1 = x0 + leftW - 12.f * s;
+                auto sliderRow = [&](float rowTop, bool isVolume, float level, bool muted) {
+                    const float rowBottom = rowTop + 30.f * s;
+                    const D2D1_RECT_F ir = D2D1::RectF(lx0, rowTop, lx0 + 30.f * s, rowBottom);
+                    const float mx = (ir.left + ir.right) / 2, my = (ir.top + ir.bottom) / 2, u = 7.f * s;
+                    const float lw = 1.5f * s;
+                    if (isVolume) {
+                        const int idMute = addCtl(5, ir.left, ir.top, ir.right, ir.bottom);
+                        if (sDashCtlHover == idMute) fillRR(ir.left, ir.top, ir.right, ir.bottom, 9.f * s, g_pal.selection, 1.f);
+                        const float xa = mx - u * 0.95f, xb = mx - u * 0.45f, xc = mx + u * 0.05f;
+                        ln(xa, my - u * 0.35f, xb, my - u * 0.35f, g_pal.text, 0.95f, lw);
+                        ln(xb, my - u * 0.35f, xc, my - u * 0.8f, g_pal.text, 0.95f, lw);
+                        ln(xc, my - u * 0.8f, xc, my + u * 0.8f, g_pal.text, 0.95f, lw);
+                        ln(xc, my + u * 0.8f, xb, my + u * 0.35f, g_pal.text, 0.95f, lw);
+                        ln(xb, my + u * 0.35f, xa, my + u * 0.35f, g_pal.text, 0.95f, lw);
+                        ln(xa, my + u * 0.35f, xa, my - u * 0.35f, g_pal.text, 0.95f, lw);
+                        if (muted || level <= 0.001f) {
+                            ln(xc + u * 0.4f, my - u * 0.4f, xc + u * 1.0f, my + u * 0.4f, g_pal.text, 0.95f, lw);
+                            ln(xc + u * 0.4f, my + u * 0.4f, xc + u * 1.0f, my - u * 0.4f, g_pal.text, 0.95f, lw);
+                        } else {
+                            ln(xc + u * 0.5f, my - u * 0.35f, xc + u * 0.8f, my - u * 0.6f, g_pal.text, 0.95f, lw);
+                            ln(xc + u * 0.5f, my + u * 0.35f, xc + u * 0.8f, my + u * 0.6f, g_pal.text, 0.95f, lw);
+                        }
+                    } else {  // sun
+                        dotC(mx, my, u * 0.45f, g_pal.text, 0.95f);
+                        for (int k = 0; k < 8; ++k) {
+                            const double a = k * kPi / 4.0;
+                            ln(mx + (float)std::cos(a) * u * 0.78f, my + (float)std::sin(a) * u * 0.78f,
+                               mx + (float)std::cos(a) * u * 1.1f, my + (float)std::sin(a) * u * 1.1f, g_pal.text, 0.95f, lw);
+                        }
+                    }
+                    const float trackL = lx0 + 38.f * s, trackR = lx1 - 46.f * s;
+                    const float midY = (rowTop + rowBottom) / 2, trackH = 8.f * s;
+                    fillRR(trackL, midY - trackH / 2, trackR, midY + trackH / 2, trackH / 2, g_pal.textDim, 0.3f);
+                    const float fillX = trackL + (trackR - trackL) * std::clamp(level, 0.f, 1.f);
+                    if (fillX - trackL > 0.5f) {
+                        fillRR(trackL, midY - trackH / 2, fillX, midY + trackH / 2, trackH / 2,
+                               muted ? g_pal.textDim : g_pal.accent, 1.f);
+                    }
+                    dotC(fillX, midY, 8.f * s, muted ? g_pal.textDim : g_pal.text, 1.f);
+                    addCtl(isVolume ? 4 : 6, trackL - 8.f * s, rowTop, trackR + 8.f * s, rowBottom);
+                    const RECT tr = RECT{(LONG)trackL, (LONG)rowTop, (LONG)trackR, (LONG)rowBottom};
+                    if (isVolume) {
+                        sSliderRect = tr;
+                    } else {
+                        sBrightRect = tr;
+                    }
+                    wchar_t pct[16] = {};
+                    swprintf_s(pct, L"%d%%", (int)std::lround(level * 100.f));
+                    brush(muted ? g_pal.textDim : g_pal.text, 1.f);
+                    D2D1_RECT_F pr = D2D1::RectF(lx1 - 44.f * s, rowTop, lx1, rowBottom);
+                    sdRt->DrawText(pct, (UINT32)wcslen(pct), sdFmtTab, &pr, sdBr);
+                };
+                const float rowsH = (hasBright ? 68.f : 30.f) * s;
+                float ry = slidersTop + ((bottom - slidersTop) - rowsH) / 2;
+                if (hasBright) {
+                    sliderRow(ry, false, sBright.level / 100.f, false);
+                    ry += 38.f * s;
+                }
+                if (sSt.hasVolume) {
+                    sliderRow(ry, true, sSt.volume, sSt.muted);
+                } else {
+                    brush(g_pal.textDim, 0.9f);
+                    const wchar_t* nv = L"No audio device";
+                    D2D1_RECT_F nr = D2D1::RectF(x0, slidersTop, x0 + leftW, bottom);
+                    sdRt->DrawText(nv, (UINT32)wcslen(nv), sdFmtSmall, &nr, sdBr);
+                }
+            }
+
+            // ---- calendar card: spans the full height (top = clock card, bottom = sliders card)
+            {
+                card(calX0, top, calX1, bottom);
                 const int month0 = (int)now.wMonth - 1 + sCalOffset;
                 const int yAdj = (month0 >= 0) ? month0 / 12 : -((11 - month0) / 12);
                 const int year = (int)now.wYear + yAdj;
@@ -9850,23 +11186,24 @@ static void RenderDash() {
                 const bool leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
                 const int daysIn = kDays[month - 1] + ((month == 2 && leap) ? 1 : 0);
 
-                const float calW = calX1 - calX0;
-                const float cellW = calW / 7.f;
-                const float headH = 28.f * s, wdH = 22.f * s;
-                const float gridTop = top + headH + wdH;
-                const float cellH = std::min((bottom - gridTop) / 6.f, 34.f * s);
+                const float pad = 14.f * s;
+                const float cx0 = calX0 + pad, cx1 = calX1 - pad;
+                const float cellW = (cx1 - cx0) / 7.f;
+                const float headTop = top + 10.f * s, headH = 28.f * s, wdH = 22.f * s;
+                const float gridTop = headTop + headH + wdH;
+                const float gridBottom = bottom - 10.f * s;
+                const float cellH = (gridBottom - gridTop) / 6.f;  // the rows stretch to fill the card
 
-                // header: arrows + title
                 {
-                    const D2D1_RECT_F pr = D2D1::RectF(calX0, top, calX0 + 28.f * s, top + headH);
-                    const D2D1_RECT_F nr = D2D1::RectF(calX1 - 28.f * s, top, calX1, top + headH);
-                    const D2D1_RECT_F tr = D2D1::RectF(calX0 + 32.f * s, top, calX1 - 32.f * s, top + headH);
+                    const D2D1_RECT_F pr = D2D1::RectF(cx0, headTop, cx0 + 30.f * s, headTop + headH);
+                    const D2D1_RECT_F nr = D2D1::RectF(cx1 - 30.f * s, headTop, cx1, headTop + headH);
+                    const D2D1_RECT_F tr = D2D1::RectF(cx0 + 34.f * s, headTop, cx1 - 34.f * s, headTop + headH);
                     const int idPrev = addCtl(1, pr.left, pr.top, pr.right, pr.bottom);
                     const int idNext = addCtl(2, nr.left, nr.top, nr.right, nr.bottom);
                     const int idTitle = addCtl(3, tr.left, tr.top, tr.right, tr.bottom);
                     if (sDashCtlHover == idPrev) fillRR(pr.left, pr.top + 2.f * s, pr.right, pr.bottom - 2.f * s, 8.f * s, g_pal.selection, 1.f);
                     if (sDashCtlHover == idNext) fillRR(nr.left, nr.top + 2.f * s, nr.right, nr.bottom - 2.f * s, 8.f * s, g_pal.selection, 1.f);
-                    const float pcx = (pr.left + pr.right) / 2, ncx = (nr.left + nr.right) / 2, cyh = top + headH / 2;
+                    const float pcx = (pr.left + pr.right) / 2, ncx = (nr.left + nr.right) / 2, cyh = headTop + headH / 2;
                     ln(pcx + 3.f * s, cyh - 6.f * s, pcx - 3.f * s, cyh, g_pal.text, 0.9f, 1.6f * s);
                     ln(pcx - 3.f * s, cyh, pcx + 3.f * s, cyh + 6.f * s, g_pal.text, 0.9f, 1.6f * s);
                     ln(ncx - 3.f * s, cyh - 6.f * s, ncx + 3.f * s, cyh, g_pal.text, 0.9f, 1.6f * s);
@@ -9877,7 +11214,6 @@ static void RenderDash() {
                     D2D1_RECT_F tt = tr;
                     sdRt->DrawText(title, (UINT32)wcslen(title), sdFmtTab, &tt, sdBr);
                 }
-                // weekday names
                 for (int c = 0; c < 7; ++c) {
                     SYSTEMTIME ref = {};
                     ref.wYear = 2023;
@@ -9887,17 +11223,16 @@ static void RenderDash() {
                     GetDateFormatW(LOCALE_USER_DEFAULT, 0, &ref, L"ddd", nm, ARRAYSIZE(nm));
                     const std::wstring two = std::wstring(nm).substr(0, 2);
                     brush(g_pal.textDim, 0.85f);
-                    D2D1_RECT_F wr = D2D1::RectF(calX0 + c * cellW, top + headH, calX0 + (c + 1) * cellW, top + headH + wdH);
+                    D2D1_RECT_F wr = D2D1::RectF(cx0 + c * cellW, headTop + headH, cx0 + (c + 1) * cellW, headTop + headH + wdH);
                     sdRt->DrawText(two.c_str(), (UINT32)two.size(), sdFmtTab, &wr, sdBr);
                 }
-                // days
                 for (int d = 1; d <= daysIn; ++d) {
                     const int idx = startCol + d - 1;
                     const int row = idx / 7, col = idx % 7;
-                    D2D1_RECT_F cr = D2D1::RectF(calX0 + col * cellW, gridTop + row * cellH, calX0 + (col + 1) * cellW,
+                    D2D1_RECT_F cr = D2D1::RectF(cx0 + col * cellW, gridTop + row * cellH, cx0 + (col + 1) * cellW,
                                                  gridTop + (row + 1) * cellH);
                     const bool today = sCalOffset == 0 && d == (int)now.wDay;
-                    if (today) dotC((cr.left + cr.right) / 2, (cr.top + cr.bottom) / 2, std::min(cellW, cellH) * 0.42f, g_pal.accent, 1.f);
+                    if (today) dotC((cr.left + cr.right) / 2, (cr.top + cr.bottom) / 2, std::min(cellW, cellH) * 0.4f, g_pal.accent, 1.f);
                     wchar_t num[8] = {};
                     swprintf_s(num, L"%d", d);
                     if (today) {
@@ -9908,55 +11243,236 @@ static void RenderDash() {
                     sdRt->DrawText(num, (UINT32)wcslen(num), sdFmtTab, &cr, sdBr);
                 }
             }
-
-            // ---- volume
-            {
-                const float vx0 = x1 - volW;
-                const float cx = (vx0 + x1) / 2;
-                if (!sSt.hasVolume) {
-                    brush(g_pal.textDim, 1.f);
-                    const wchar_t* nv = L"No audio";
-                    D2D1_RECT_F nr = D2D1::RectF(vx0, top + 60.f * s, x1, top + 90.f * s);
-                    sdRt->DrawText(nv, (UINT32)wcslen(nv), sdFmtTab, &nr, sdBr);
+        } else if (sDashTab == 2) {
+            // ---- Performance: four gauges + a network card
+            PerfSnap ps;
+            PerfGet(ps);
+            const float rowH1 = 178.f * s;
+            const float cardW = (totalW - 3.f * gapC) / 4.f;
+            const wchar_t* labels[4] = {L"CPU", L"GPU", L"Memory", L"Disk"};
+            float frac[4] = {0.f, 0.f, 0.f, 0.f};
+            wchar_t valTxt[4][24] = {};
+            wchar_t subTxt[4][48] = {};
+            if (ps.valid) {
+                frac[0] = ps.cpu / 100.f;
+                swprintf_s(valTxt[0], L"%d%%", (int)std::lround(ps.cpu));
+                if (ps.gpu >= 0.f) {
+                    frac[1] = ps.gpu / 100.f;
+                    swprintf_s(valTxt[1], L"%d%%", (int)std::lround(ps.gpu));
+                    wcscpy_s(subTxt[1], L"3D engine");
                 } else {
-                    const float topY = top + 26.f * s;
-                    const float botY = bottom - 58.f * s;
-                    const float trackW = 8.f * s;
-                    wchar_t pct[16] = {};
-                    swprintf_s(pct, L"%d%%", (int)std::lround(sSt.volume * 100.f));
-                    brush(sSt.muted ? g_pal.textDim : g_pal.text, 1.f);
-                    D2D1_RECT_F pr = D2D1::RectF(vx0, top, x1, top + 22.f * s);
-                    sdRt->DrawText(pct, (UINT32)wcslen(pct), sdFmtTab, &pr, sdBr);
+                    wcscpy_s(valTxt[1], L"N/A");
+                    wcscpy_s(subTxt[1], L"no GPU counters");
+                }
+                frac[2] = ps.ram / 100.f;
+                swprintf_s(valTxt[2], L"%d%%", (int)std::lround(ps.ram));
+                swprintf_s(subTxt[2], L"%.1f / %.1f GB", ps.ramUsed, ps.ramTotal);
+                frac[3] = ps.disk / 100.f;
+                swprintf_s(valTxt[3], L"%d%%", (int)std::lround(ps.disk));
+                swprintf_s(subTxt[3], L"%.0f / %.0f GB", ps.diskUsed, ps.diskTotal);
+            } else {
+                for (int i = 0; i < 4; ++i) wcscpy_s(valTxt[i], L"...");
+            }
+            auto ring = [&](float rcx, float rcy, float rad, float f, const D2D1_COLOR_F& col) {
+                const float w = 7.f * s;
+                D2D1_ELLIPSE e = D2D1::Ellipse(D2D1::Point2F(rcx, rcy), rad, rad);
+                brush(g_pal.textDim, 0.22f);
+                sdRt->DrawEllipse(&e, sdBr, w);
+                f = std::clamp(f, 0.f, 1.f);
+                if (f < 0.004f) return;
+                brush(col, 1.f);
+                if (f > 0.995f) {
+                    sdRt->DrawEllipse(&e, sdBr, w);
+                    return;
+                }
+                const double a1 = -kPi / 2 + 2 * kPi * f;
+                ID2D1PathGeometry* g = nullptr;
+                ID2D1GeometrySink* sk = nullptr;
+                if (SUCCEEDED(g_d2d->CreatePathGeometry(&g)) && g && SUCCEEDED(g->Open(&sk)) && sk) {
+                    sk->BeginFigure(D2D1::Point2F(rcx, rcy - rad), D2D1_FIGURE_BEGIN_HOLLOW);
+                    sk->AddArc(D2D1::ArcSegment(
+                        D2D1::Point2F(rcx + rad * (float)std::cos(a1), rcy + rad * (float)std::sin(a1)),
+                        D2D1::SizeF(rad, rad), 0.f, D2D1_SWEEP_DIRECTION_CLOCKWISE,
+                        f > 0.5f ? D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL));
+                    sk->EndFigure(D2D1_FIGURE_END_OPEN);
+                    sk->Close();
+                    sdRt->DrawGeometry(g, sdBr, w, g_roundStroke);
+                }
+                SafeRelease(sk);
+                SafeRelease(g);
+            };
+            const D2D1_COLOR_F warn = D2D1::ColorF(0.95f, 0.38f, 0.36f, 1.f);
+            for (int i = 0; i < 4; ++i) {
+                const float cl = x0 + i * (cardW + gapC), cr = cl + cardW;
+                card(cl, top, cr, top + rowH1);
+                const float rcx = (cl + cr) / 2, rad = std::min(cardW * 0.34f, 46.f * s), rcy = top + 18.f * s + rad + 6.f * s;
+                const bool na = (i == 1 && ps.valid && ps.gpu < 0.f);
+                ring(rcx, rcy, rad, frac[i], frac[i] > 0.88f ? warn : g_pal.accent);
+                brush(na ? g_pal.textDim : g_pal.text, 1.f);
+                D2D1_RECT_F vr = D2D1::RectF(rcx - rad, rcy - 15.f * s, rcx + rad, rcy + 15.f * s);
+                sdRt->DrawText(valTxt[i], (UINT32)wcslen(valTxt[i]), sdFmtRing, &vr, sdBr);
+                brush(g_pal.text, 0.95f);
+                D2D1_RECT_F lr = D2D1::RectF(cl, rcy + rad + 12.f * s, cr, rcy + rad + 32.f * s);
+                sdRt->DrawText(labels[i], (UINT32)wcslen(labels[i]), sdFmtTab, &lr, sdBr);
+                brush(g_pal.textDim, 0.9f);
+                D2D1_RECT_F sr = D2D1::RectF(cl, rcy + rad + 32.f * s, cr, rcy + rad + 50.f * s);
+                sdRt->DrawText(subTxt[i], (UINT32)wcslen(subTxt[i]), sdFmtTiny, &sr, sdBr);
+            }
 
-                    fillRR(cx - trackW / 2, topY, cx + trackW / 2, botY, trackW / 2, g_pal.textDim, 0.3f);
-                    const float fillTop = botY - (botY - topY) * std::clamp(sSt.volume, 0.f, 1.f);
-                    if (botY - fillTop > 0.5f) {
-                        fillRR(cx - trackW / 2, fillTop, cx + trackW / 2, botY, trackW / 2,
-                               sSt.muted ? g_pal.textDim : g_pal.accent, 1.f);
+            // network card
+            const float netTop = top + rowH1 + gapC;
+            card(x0, netTop, x1, bottom);
+            const float half = (x1 - x0) / 2;
+            for (int side = 0; side < 2; ++side) {
+                const float sx0 = x0 + side * half, sx1 = sx0 + half;
+                const float acx = sx0 + 46.f * s, acy = (netTop + bottom) / 2;
+                const float dir = side == 0 ? 1.f : -1.f;  // down arrow / up arrow
+                ln(acx, acy - 12.f * s * dir, acx, acy + 12.f * s * dir, g_pal.accent, 1.f, 2.4f * s);
+                ln(acx - 8.f * s, acy + 4.f * s * dir, acx, acy + 12.f * s * dir, g_pal.accent, 1.f, 2.4f * s);
+                ln(acx + 8.f * s, acy + 4.f * s * dir, acx, acy + 12.f * s * dir, g_pal.accent, 1.f, 2.4f * s);
+                const double bps = ps.valid ? (side == 0 ? ps.netDown : ps.netUp) : 0.0;
+                wchar_t rate[32] = {};
+                if (!ps.valid) {
+                    wcscpy_s(rate, L"...");
+                } else if (bps >= 1e6) {
+                    swprintf_s(rate, L"%.1f MB/s", bps / 1e6);
+                } else {
+                    swprintf_s(rate, L"%.0f KB/s", bps / 1e3);
+                }
+                brush(g_pal.text, 1.f);
+                D2D1_RECT_F rr1 = D2D1::RectF(acx + 24.f * s, acy - 24.f * s, sx1 - 8.f * s, acy + 6.f * s);
+                sdRt->DrawText(rate, (UINT32)wcslen(rate), sdFmtMid, &rr1, sdBr);
+                brush(g_pal.textDim, 1.f);
+                const wchar_t* lab = side == 0 ? L"Download" : L"Upload";
+                D2D1_RECT_F rr2 = D2D1::RectF(acx + 24.f * s, acy + 6.f * s, sx1 - 8.f * s, acy + 26.f * s);
+                sdRt->DrawText(lab, (UINT32)wcslen(lab), sdFmtSmallL, &rr2, sdBr);
+            }
+        } else if (sDashTab == 1) {
+            // ---- Media: now playing
+            MediaSnap md;
+            MediaGet(md);
+            card(x0, top, x1, bottom);
+            if (!md.valid) {
+                brush(g_pal.textDim, 1.f);
+                const wchar_t* msg = L"Nothing is playing";
+                D2D1_RECT_F r = D2D1::RectF(x0, top, x1, bottom);
+                sdRt->DrawText(msg, (UINT32)wcslen(msg), sdFmtSmall, &r, sdBr);
+            } else {
+                const float pad = 18.f * s;
+                const float artSz = (bottom - top) - 2.f * pad;
+                const float ax = x0 + pad, ay = top + pad;
+
+                // cover art (fitted into a square, rounded corners through a bitmap brush)
+                bool drewCover = false;
+                if (md.thumbW > 0 && md.thumbH > 0 && !md.thumbPx.empty()) {
+                    D2D1_BITMAP_PROPERTIES bp = D2D1::BitmapProperties(
+                        D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED), 96.f, 96.f);
+                    ID2D1Bitmap* bmp = nullptr;
+                    if (SUCCEEDED(sdRt->CreateBitmap(D2D1::SizeU((UINT32)md.thumbW, (UINT32)md.thumbH),
+                                                     md.thumbPx.data(), (UINT32)md.thumbW * 4, &bp, &bmp)) &&
+                        bmp) {
+                        const float sc = std::min(artSz / (float)md.thumbW, artSz / (float)md.thumbH);
+                        const float dw = md.thumbW * sc, dh = md.thumbH * sc;
+                        const float dx = ax + (artSz - dw) / 2, dy = ay + (artSz - dh) / 2;
+                        ID2D1BitmapBrush* bb = nullptr;
+                        D2D1_BITMAP_BRUSH_PROPERTIES bbp = D2D1::BitmapBrushProperties(
+                            D2D1_EXTEND_MODE_CLAMP, D2D1_EXTEND_MODE_CLAMP, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
+                        if (SUCCEEDED(sdRt->CreateBitmapBrush(bmp, &bbp, nullptr, &bb)) && bb) {
+                            D2D1_MATRIX_3X2_F m = D2D1::Matrix3x2F::Scale(sc, sc) * D2D1::Matrix3x2F::Translation(dx, dy);
+                            bb->SetTransform(&m);
+                            D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(D2D1::RectF(dx, dy, dx + dw, dy + dh), 12.f * s, 12.f * s);
+                            sdRt->FillRoundedRectangle(&rr, bb);
+                            drewCover = true;
+                            bb->Release();
+                        }
+                        bmp->Release();
                     }
-                    dotC(cx, fillTop, 8.f * s, sSt.muted ? g_pal.textDim : g_pal.text, 1.f);
-                    addCtl(4, cx - 16.f * s, topY - 8.f * s, cx + 16.f * s, botY + 8.f * s);
-                    sSliderRect = RECT{(LONG)(cx - 16.f * s), (LONG)topY, (LONG)(cx + 16.f * s), (LONG)botY};
+                }
+                if (!drewCover) {
+                    fillRR(ax, ay, ax + artSz, ay + artSz, 12.f * s, g_pal.textDim, 0.18f);
+                    dotC(ax + artSz / 2, ay + artSz / 2, artSz * 0.12f, g_pal.textDim, 0.5f);
+                }
 
-                    // mute button
-                    const D2D1_RECT_F mr = D2D1::RectF(cx - 17.f * s, botY + 16.f * s, cx + 17.f * s, botY + 50.f * s);
-                    const int idMute = addCtl(5, mr.left, mr.top, mr.right, mr.bottom);
-                    if (sDashCtlHover == idMute) fillRR(mr.left, mr.top, mr.right, mr.bottom, 9.f * s, g_pal.selection, 1.f);
-                    const float mx = (mr.left + mr.right) / 2, my = (mr.top + mr.bottom) / 2, u = 7.f * s;
-                    const float xa = mx - u * 0.95f, xb = mx - u * 0.45f, xc = mx + u * 0.05f, lw = 1.5f * s;
-                    ln(xa, my - u * 0.35f, xb, my - u * 0.35f, g_pal.text, 0.95f, lw);
-                    ln(xb, my - u * 0.35f, xc, my - u * 0.8f, g_pal.text, 0.95f, lw);
-                    ln(xc, my - u * 0.8f, xc, my + u * 0.8f, g_pal.text, 0.95f, lw);
-                    ln(xc, my + u * 0.8f, xb, my + u * 0.35f, g_pal.text, 0.95f, lw);
-                    ln(xb, my + u * 0.35f, xa, my + u * 0.35f, g_pal.text, 0.95f, lw);
-                    ln(xa, my + u * 0.35f, xa, my - u * 0.35f, g_pal.text, 0.95f, lw);
-                    if (sSt.muted || sSt.volume <= 0.001f) {
-                        ln(xc + u * 0.4f, my - u * 0.4f, xc + u * 1.0f, my + u * 0.4f, g_pal.text, 0.95f, lw);
-                        ln(xc + u * 0.4f, my + u * 0.4f, xc + u * 1.0f, my - u * 0.4f, g_pal.text, 0.95f, lw);
+                const float tx = ax + artSz + 22.f * s, trx = x1 - pad, ty = top + pad;
+                brush(g_pal.text, 1.f);
+                drawScroll(md.title.empty() ? std::wstring(L"Unknown title") : md.title, sdFmtMid, tx, ty, trx, ty + 34.f * s);
+                brush(g_pal.textDim, 1.f);
+                drawScroll(md.artist, sdFmtSmallL, tx, ty + 36.f * s, trx, ty + 56.f * s);
+                brush(g_pal.textDim, 0.7f);
+                drawScroll(md.album, sdFmtSmallL, tx, ty + 56.f * s, trx, ty + 76.f * s);
+
+                // progress
+                double pos = md.position;
+                if (md.playing && md.at) pos += (double)(GetTickCount64() - md.at) / 1000.0;
+                if (md.duration > 0.0) pos = std::min(pos, md.duration);
+                pos = std::max(pos, 0.0);
+                const float barY = bottom - pad - 40.f * s;
+                fillRR(tx, barY, trx, barY + 6.f * s, 3.f * s, g_pal.textDim, 0.3f);
+                const float frac = md.duration > 0.0 ? (float)std::clamp(pos / md.duration, 0.0, 1.0) : 0.f;
+                if (frac > 0.002f) fillRR(tx, barY, tx + (trx - tx) * frac, barY + 6.f * s, 3.f * s, g_pal.accent, 1.f);
+                auto fmtT = [](double sec, wchar_t* out, size_t n) {
+                    const int t = (int)sec;
+                    if (t >= 3600) {
+                        swprintf_s(out, n, L"%d:%02d:%02d", t / 3600, (t / 60) % 60, t % 60);
                     } else {
-                        ln(xc + u * 0.5f, my - u * 0.35f, xc + u * 0.8f, my - u * 0.6f, g_pal.text, 0.95f, lw);
-                        ln(xc + u * 0.5f, my + u * 0.35f, xc + u * 0.8f, my + u * 0.6f, g_pal.text, 0.95f, lw);
+                        swprintf_s(out, n, L"%d:%02d", t / 60, t % 60);
                     }
+                };
+                wchar_t a1[24] = {}, a2[24] = {}, tbuf[56] = {};
+                fmtT(pos, a1, 24);
+                if (md.duration > 0.0) {
+                    fmtT(md.duration, a2, 24);
+                    swprintf_s(tbuf, L"%ls / %ls", a1, a2);
+                } else {
+                    wcscpy_s(tbuf, a1);
+                }
+                brush(g_pal.textDim, 0.9f);
+                D2D1_RECT_F tr = D2D1::RectF(tx, barY + 10.f * s, trx, barY + 30.f * s);
+                sdRt->DrawText(tbuf, (UINT32)wcslen(tbuf), sdFmtTiny, &tr, sdBr);
+
+                // controls: previous / play-pause / next
+                auto tri = [&](float x1_, float y1_, float x2_, float y2_, float x3_, float y3_, const D2D1_COLOR_F& col) {
+                    ID2D1PathGeometry* g = nullptr;
+                    ID2D1GeometrySink* sk = nullptr;
+                    if (SUCCEEDED(g_d2d->CreatePathGeometry(&g)) && g && SUCCEEDED(g->Open(&sk)) && sk) {
+                        sk->BeginFigure(D2D1::Point2F(x1_, y1_), D2D1_FIGURE_BEGIN_FILLED);
+                        sk->AddLine(D2D1::Point2F(x2_, y2_));
+                        sk->AddLine(D2D1::Point2F(x3_, y3_));
+                        sk->EndFigure(D2D1_FIGURE_END_CLOSED);
+                        sk->Close();
+                        brush(col, 1.f);
+                        sdRt->FillGeometry(g, sdBr);
+                    }
+                    SafeRelease(sk);
+                    SafeRelease(g);
+                };
+                const float midX = (tx + trx) / 2;
+                const float ctlY = (ty + 84.f * s + barY) / 2;
+                const float spread = 66.f * s;
+                const D2D1_COLOR_F white = D2D1::ColorF(1.f, 1.f, 1.f, 1.f);
+                {
+                    const float px = midX - spread;
+                    const int id = addCtl(7, px - 22.f * s, ctlY - 22.f * s, px + 22.f * s, ctlY + 22.f * s);
+                    if (sDashCtlHover == id) fillRR(px - 22.f * s, ctlY - 22.f * s, px + 22.f * s, ctlY + 22.f * s, 22.f * s, g_pal.selection, 1.f);
+                    fillRR(px - 9.f * s, ctlY - 8.f * s, px - 6.5f * s, ctlY + 8.f * s, 1.f * s, g_pal.text, 1.f);
+                    tri(px + 8.f * s, ctlY - 8.f * s, px + 8.f * s, ctlY + 8.f * s, px - 5.f * s, ctlY, g_pal.text);
+                }
+                {
+                    const int id = addCtl(8, midX - 26.f * s, ctlY - 26.f * s, midX + 26.f * s, ctlY + 26.f * s);
+                    dotC(midX, ctlY, sDashCtlHover == id ? 26.f * s : 24.f * s, g_pal.accent, 1.f);
+                    if (md.playing) {
+                        fillRR(midX - 8.f * s, ctlY - 9.f * s, midX - 3.f * s, ctlY + 9.f * s, 1.5f * s, white, 1.f);
+                        fillRR(midX + 3.f * s, ctlY - 9.f * s, midX + 8.f * s, ctlY + 9.f * s, 1.5f * s, white, 1.f);
+                    } else {
+                        tri(midX - 6.f * s, ctlY - 10.f * s, midX - 6.f * s, ctlY + 10.f * s, midX + 10.f * s, ctlY, white);
+                    }
+                }
+                {
+                    const float px = midX + spread;
+                    const int id = addCtl(9, px - 22.f * s, ctlY - 22.f * s, px + 22.f * s, ctlY + 22.f * s);
+                    if (sDashCtlHover == id) fillRR(px - 22.f * s, ctlY - 22.f * s, px + 22.f * s, ctlY + 22.f * s, 22.f * s, g_pal.selection, 1.f);
+                    fillRR(px + 6.5f * s, ctlY - 8.f * s, px + 9.f * s, ctlY + 8.f * s, 1.f * s, g_pal.text, 1.f);
+                    tri(px - 8.f * s, ctlY - 8.f * s, px - 8.f * s, ctlY + 8.f * s, px + 5.f * s, ctlY, g_pal.text);
                 }
             }
         } else {
@@ -9980,6 +11496,11 @@ static void RenderDash() {
     bf.SourceConstantAlpha = (BYTE)std::clamp((int)std::lround(dashAlpha * 255.0), 0, 255);
     bf.AlphaFormat = AC_SRC_ALPHA;
     UpdateLayeredWindow(sDash, nullptr, nullptr, &sz, sdDC, &src, 0, &bf, ULW_ALPHA);
+    if (sMarqActive && sDashWanted && sBar) {
+        SetTimer(sBar, T_MARQ, 33, nullptr);  // keeps the scrolling text moving (~30 fps)
+    } else if (sBar) {
+        KillTimer(sBar, T_MARQ);
+    }
 }
 
 static int DashHitCtl(int x, int y) {
@@ -9990,9 +11511,9 @@ static int DashHitCtl(int x, int y) {
     return -1;
 }
 
-static void DashSetVolumeFromY(int y) {
-    if (!sEpVol || sSliderRect.bottom <= sSliderRect.top) return;
-    float v = 1.f - (float)(y - sSliderRect.top) / (float)(sSliderRect.bottom - sSliderRect.top);
+static void DashSetVolumeFromX(int x) {
+    if (!sEpVol || sSliderRect.right <= sSliderRect.left) return;
+    float v = (float)(x - sSliderRect.left) / (float)(sSliderRect.right - sSliderRect.left);
     v = std::clamp(v, 0.f, 1.f);
     sEpVol->SetMasterVolumeLevelScalar(v, nullptr);
     if (v > 0.f && sSt.muted) sEpVol->SetMute(FALSE, nullptr);
@@ -10010,6 +11531,22 @@ static void DashNudgeVolume(bool up) {
     RenderDash();
 }
 
+static void DashSetBrightFromX(int x) {
+    if (sBrightRect.right <= sBrightRect.left) return;
+    float v = (float)(x - sBrightRect.left) / (float)(sBrightRect.right - sBrightRect.left);
+    v = std::clamp(v, 0.f, 1.f);
+    const int level = (int)std::lround(v * 100.f);
+    if (level == sBright.level) return;  // avoid hammering the driver on every mouse move
+    SetBrightness(level);
+    RenderDash();
+}
+
+static void DashNudgeBright(bool up) {
+    if (!sBright.has) return;
+    SetBrightness(sBright.level + (up ? 5 : -5));
+    RenderDash();
+}
+
 static LRESULT CALLBACK DashProc(HWND h, UINT m, WPARAM w, LPARAM l) {
     switch (m) {
         case WM_MOUSEACTIVATE:
@@ -10017,7 +11554,11 @@ static LRESULT CALLBACK DashProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         case WM_MOUSEMOVE: {
             const int x = GET_X_LPARAM(l), y = GET_Y_LPARAM(l);
             if (sVolDrag) {
-                DashSetVolumeFromY(y);
+                DashSetVolumeFromX(x);
+                return 0;
+            }
+            if (sBrightDrag) {
+                DashSetBrightFromX(x);
                 return 0;
             }
             if (!sdTracking) {
@@ -10066,7 +11607,21 @@ static LRESULT CALLBACK DashProc(HWND h, UINT m, WPARAM w, LPARAM l) {
                 case 4:
                     sVolDrag = true;
                     SetCapture(h);
-                    DashSetVolumeFromY(y);
+                    DashSetVolumeFromX(x);
+                    break;
+                case 7:
+                    MediaCommand(1);
+                    break;
+                case 8:
+                    MediaCommand(2);
+                    break;
+                case 9:
+                    MediaCommand(3);
+                    break;
+                case 6:
+                    sBrightDrag = true;
+                    SetCapture(h);
+                    DashSetBrightFromX(x);
                     break;
                 case 5:
                     if (sEpVol) {
@@ -10079,6 +11634,12 @@ static LRESULT CALLBACK DashProc(HWND h, UINT m, WPARAM w, LPARAM l) {
             return 0;
         }
         case WM_LBUTTONUP: {
+            if (sBrightDrag) {
+                sBrightDrag = false;
+                ReleaseCapture();
+                RenderDash();
+                return 0;
+            }
             if (sVolDrag) {
                 sVolDrag = false;
                 ReleaseCapture();
@@ -10103,6 +11664,8 @@ static LRESULT CALLBACK DashProc(HWND h, UINT m, WPARAM w, LPARAM l) {
             const int kind = i >= 0 ? sDashCtl[i].kind : 0;
             if (kind == 4 || kind == 5) {
                 DashNudgeVolume(up);
+            } else if (kind == 6) {
+                DashNudgeBright(up);
             } else if (sDashTab == 0) {
                 sCalOffset += up ? -1 : 1;  // wheel up = earlier month
                 RenderDash();
@@ -10140,7 +11703,7 @@ static void PositionDash() {
     RECT inner = sInnerValid ? sInner : RECT{0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
     const int fl = (int)std::lround(cfg.frameRadius * dpi);
     int pw = (int)std::lround(620 * dpi);
-    int ph = (int)std::lround(340 * dpi);
+    int ph = (int)std::lround(380 * dpi);
     pw = std::min(pw, std::max(200, (int)(inner.right - inner.left) - 2 * fl - 20));
     ph = std::min(ph, std::max(120, (int)(inner.bottom - inner.top) - 20));
     const int sw = pw + 2 * fl;
@@ -10155,6 +11718,8 @@ static void DashOpen(bool viaEdge) {
     if (!sDashWanted) {
         sCalOffset = 0;
         PollVolume();
+        PollBrightness();
+        WeatherPoke();
         PositionDash();
         if (!sDash) return;
         sDashViaEdge = viaEdge;
@@ -10222,7 +11787,7 @@ static void EdgePoll() {
     const bool buttonDown = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) || (GetAsyncKeyState(VK_RBUTTON) & 0x8000);
 
     if (sDashWanted) {
-        if (sVolDrag) return;  // dragging the volume slider: never auto close
+        if (sVolDrag || sBrightDrag) return;  // dragging a slider: never auto close
         RECT wr = {};
         if (sDash && GetWindowRect(sDash, &wr)) {
             InflateRect(&wr, 12, 12);
@@ -10243,7 +11808,17 @@ static void EdgePoll() {
             }
             SYSTEMTIME st;
             GetLocalTime(&st);
-            if (sDashTab == 0 && (st.wMinute != sdLastMinute || PollVolume())) RenderDash();  // clock + volume
+            bool brightChanged = false;
+            {
+                static ULONGLONG lastB = 0;
+                if (nowMs - lastB > 700) {
+                    lastB = nowMs;
+                    brightChanged = PollBrightness();
+                }
+            }
+            if (sDashTab == 0 && (st.wMinute != sdLastMinute || PollVolume() || brightChanged)) {
+                RenderDash();  // clock + volume + brightness
+            }
         }
         return;
     }
@@ -10274,15 +11849,24 @@ static void DashApply() {
         sDashK = 1.0;
         sDashV = 0.0;
         if (sDash) ShowWindow(sDash, SW_HIDE);
+        WeatherStop();
         return;
     }
     static const UINT kMods[3] = {MOD_CONTROL | MOD_ALT, MOD_ALT | MOD_SHIFT, MOD_WIN | MOD_SHIFT};
     const int k = std::clamp(cfg.dashKey, 0, 2);
     RegisterHotKey(sBar, HK_DASH, kMods[k] | MOD_NOREPEAT, 'D');
+    if (cfg.weather) {
+        WeatherStart();
+    } else {
+        WeatherStop();
+    }
     SetTimer(sBar, T_EDGE, 60, nullptr);  // also handles auto close of an open dashboard
 }
 
 static void DashShutdown() {
+    MediaStop();
+    PerfStop();
+    WeatherStop();
     if (sBar) {
         KillTimer(sBar, T_DASH);
         KillTimer(sBar, T_EDGE);
@@ -10295,6 +11879,10 @@ static void DashShutdown() {
     SafeRelease(sdFmtTab);
     SafeRelease(sdFmtBig);
     SafeRelease(sdFmtSmall);
+    SafeRelease(sdFmtMid);
+    SafeRelease(sdFmtSmallL);
+    SafeRelease(sdFmtRing);
+    SafeRelease(sdFmtTiny);
     SafeRelease(sdBr);
     SafeRelease(sdRt);
     if (sdDib) {
@@ -10305,6 +11893,59 @@ static void DashShutdown() {
     if (sdDC) {
         DeleteDC(sdDC);
         sdDC = nullptr;
+    }
+}
+
+// ===== Self-healing: rebuild the shell when something is off (fresh boot, monitor change...) =====
+static ULONGLONG sLastRebuild = 0;
+static int sBootStage = 0;
+
+static void ForceRebuild(const wchar_t* why) {
+    Wh_Log(L"Fluid Shell: rebuilding (%ls)", why);
+    sLastRebuild = GetTickCount64();
+    UnregisterBar();
+    TeardownFrame();
+    sRect = RECT{};
+    Apply();
+}
+
+// Called every ~5 s: compares what exists with what should exist.
+static void SanityCheck() {
+    if (!sBar || !cfg.bar || sSuppressed) return;
+    const ULONGLONG now = GetTickCount64();
+    if (now - sLastRebuild < 10000) return;  // at most one rebuild every 10 s
+
+    HMONITOR mon = MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY);
+    MONITORINFO mi = {};
+    mi.cbSize = sizeof(mi);
+    if (!GetMonitorInfoW(mon, &mi)) return;
+
+    const wchar_t* why = nullptr;
+    if (!sInnerValid || memcmp(&mi.rcMonitor, &sMonRect, sizeof(RECT)) != 0) {
+        why = L"monitor changed";
+    } else if (std::fabs(sScale - MonitorScale(mon) * (cfg.scalePct / 100.0)) > 0.001) {
+        why = L"dpi changed";
+    } else if (!IsWindowVisible(sBar)) {
+        why = L"bar hidden";
+    } else {
+        RECT wr = {};
+        if (GetWindowRect(sBar, &wr) && !EqualRect(&wr, &sRect)) why = L"bar moved";
+    }
+    if (!why && cfg.frame) {
+        for (int i = 0; i < 3 && !why; ++i) {
+            if (!sEdge[i] || !IsWindowVisible(sEdge[i])) why = L"frame missing";
+        }
+    }
+    if (why) {
+        ForceRebuild(why);
+        return;
+    }
+    if (cfg.hideTaskbar && !sRevealed) {  // the native taskbar came back (late Explorer start...): hide it again
+        HWND tray = FindWindowW(L"Shell_TrayWnd", nullptr);
+        if (tray && IsWindowVisible(tray)) {
+            Wh_Log(L"Fluid Shell: hiding the native taskbar again");
+            SetTaskbarHidden(true);
+        }
     }
 }
 
@@ -10433,6 +12074,20 @@ static LRESULT CALLBACK BarProc(HWND h, UINT m, WPARAM w, LPARAM l) {
                 DashTick();
             } else if (w == T_EDGE) {
                 EdgePoll();
+            } else if (w == T_MARQ) {
+                if (sDashWanted && (sDashTab == 0 || sDashTab == 1) && sMarqActive) {
+                    RenderDash();
+                } else {
+                    KillTimer(h, T_MARQ);
+                }
+            } else if (w == T_OSDPOLL) {
+                OsdPoll();
+            } else if (w == T_OSD) {
+                OsdTick();
+            } else if (w == T_BOOT) {
+                KillTimer(h, T_BOOT);
+                ForceRebuild(L"after boot");
+                if (++sBootStage < 2) SetTimer(h, T_BOOT, 11000, nullptr);
             } else if (w == T_POS) {
                 KillTimer(h, T_POS);
                 PositionBar();
@@ -10453,6 +12108,7 @@ static LRESULT CALLBACK BarProc(HWND h, UINT m, WPARAM w, LPARAM l) {
                 }
                 if (cfg.status && PollStatus(sTickCount % 10 == 9)) redraw = true;
                 if (++sTickCount % 10 == 0) {  // safety net next to the shell hook
+                    SanityCheck();
                     RefreshItems();
                     redraw = true;
                 }
@@ -10461,6 +12117,10 @@ static LRESULT CALLBACK BarProc(HWND h, UINT m, WPARAM w, LPARAM l) {
             return 0;
 
         case WM_HOTKEY:
+            if (w == HK_REBUILD) {  // Ctrl+Alt+Shift+R: rebuild by hand (same as toggling the mod)
+                ForceRebuild(L"hotkey");
+                return 0;
+            }
             if (w == HK_DASH) {
                 if (sDashWanted) {
                     DashClose();
@@ -10482,6 +12142,18 @@ static LRESULT CALLBACK BarProc(HWND h, UINT m, WPARAM w, LPARAM l) {
 
         case WM_DISPLAYCHANGE:
             SetTimer(h, T_POS, 400, nullptr);
+            return 0;
+
+        case WM_MEDIA_UPDATED:  // the media thread has a new snapshot
+            if (sDashWanted && sDashTab == 1) RenderDash();
+            return 0;
+
+        case WM_PERF_UPDATED:  // the performance thread has a new sample
+            if (sDashWanted && sDashTab == 2) RenderDash();
+            return 0;
+
+        case WM_WX_UPDATED:  // the weather thread has a new result
+            if (sDashWanted && sDashTab == 0) RenderDash();
             return 0;
 
         case WM_APPBAR_CB:
@@ -10513,7 +12185,10 @@ void Init(HINSTANCE inst) {
     sHookMsg = RegisterWindowMessageW(L"SHELLHOOK");
     sCreatedMsg = RegisterWindowMessageW(L"TaskbarCreated");
     RegisterHotKey(sBar, HK_TASKBAR, MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT, 'T');
+    RegisterHotKey(sBar, HK_REBUILD, MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT, 'R');
     Apply();
+    // Right after a boot Explorer and the monitors may still be settling: rebuild at +4 s and +15 s.
+    if (GetTickCount64() < 15ULL * 60ULL * 1000ULL) SetTimer(sBar, T_BOOT, 4000, nullptr);
 }
 
 bool GetInnerRect(const RECT& mon, RECT* out) {
@@ -10546,7 +12221,9 @@ void Shutdown() {
     RemoveEvHook();
     UnhookShell();
     UnregisterHotKey(sBar, HK_TASKBAR);
+    UnregisterHotKey(sBar, HK_REBUILD);
     SetTaskbarHidden(false);  // always give the taskbar back
+    OsdShutdown();
     DashShutdown();
     StopNetThread();
     ReleaseVolume();
